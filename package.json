@@ -2,7 +2,8 @@
   "name": "sunburst-chart",
   "version": "0.9.2",
   "description": "Sunburst interactive chart web component for visualizing hierarchical data",
-  "main": "dist/sunburst-chart.min.js",
+  "unpkg": "dist/sunburst-chart.min.js",
+  "main": "dist/sunburst-chart.common.js",
   "module": "dist/sunburst-chart.mjs",
   "repository": {
     "type": "git",
