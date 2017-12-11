@@ -1,6 +1,10 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
+import resolve from 'rollup-plugin-node-resolve';
 import commonJs from 'rollup-plugin-commonjs';
+import postCss from 'rollup-plugin-postcss';
+import postCssSimpleVars from 'postcss-simple-vars';
+import postCssNested from 'postcss-nested';
 import babel from 'rollup-plugin-babel';
+import { name, homepage, version } from './package.json';
 
 export default {
     input: 'src/index.js',
@@ -8,23 +12,20 @@ export default {
         {
             format: 'umd',
             name: 'Sunburst',
-            file: 'dist/sunburst-chart.js',
+            file: `dist/${name}.js`,
             sourcemap: true
-        },
-        {
-            format: 'es',
-            file: 'dist/sunburst-chart.mjs'
         }
     ],
     plugins: [
-        nodeResolve(),
+        postCss({
+            plugins: [
+                postCssSimpleVars(),
+                postCssNested()
+            ]
+        }),
+        resolve(),
         commonJs(),
-        babel({
-            presets: [
-                ["es2015", { "modules": false }]
-            ],
-            plugins: ["external-helpers"],
-            babelrc: false
-        })
-    ]
+        babel({ exclude: 'node_modules/**' })
+    ],
+    banner: `// Version ${version} ${name} - ${homepage}`
 };
