@@ -129,6 +129,8 @@ export default Kapsule({
         d => d.id
       );
 
+    const nameOf = accessorFn(state.label);
+    const colorOf = accessorFn(state.color);
     const transition = d3Transition().duration(TRANSITION_DURATION);
 
     // Apply zoom
@@ -158,28 +160,20 @@ export default Kapsule({
       .on('mouseover', d => {
         state.tooltip.style('display', 'inline');
         state.tooltip.html(`<div class="tooltip-title">${
-          getNodeStack(d).map(d => accessorFn(state.label)(d.data)).join(' > ')
-        }</div>${state.tooltipContent(d.data)}`);
+          getNodeStack(d).map(d => nameOf(d.data)).join(' > ')
+        }</div>${state.tooltipContent(d.data, d)}`);
       })
       .on('mouseout', () => { state.tooltip.style('display', 'none'); });
 
     newSlice.append('path')
       .attr('class', 'main-arc')
-      .attr('id', d => `main-arc-${state.chartId}-${d.id}`)
-      .style('fill', d => accessorFn(state.color)(d.data, d.parent));
+      .style('fill', d => colorOf(d.data, d.parent));
 
     newSlice.append('path')
       .attr('class', 'hidden-arc')
       .attr('id', d => `hidden-arc-${state.chartId}-${d.id}`);
 
-    newSlice.append('clipPath')
-      .attr('id', d => `clip-${state.chartId}-${d.id}`)
-      .append('use')
-        .attr('xlink:href', d => `#main-arc-${state.chartId}-${d.id}`);
-
-    const label = newSlice.append('g')
-      .attr('clip-path', d => `url(#clip-${state.chartId}-${d.id})`)
-      .append('text')
+    const label = newSlice.append('text')
         .attr('class', 'path-label');
 
     // Add white contour
@@ -199,7 +193,7 @@ export default Kapsule({
 
     allSlices.select('path.main-arc').transition(transition)
       .attrTween('d', d => () => state.arc(d))
-      .style('fill', d => accessorFn(state.color)(d.data, d.parent));
+      .style('fill', d => colorOf(d.data, d.parent));
 
     allSlices.select('path.hidden-arc').transition(transition)
       .attrTween('d', d => () => middleArcLine(d));
@@ -209,7 +203,7 @@ export default Kapsule({
         .styleTween('display', d => () => state.showLabels && textFits(d) ? null : 'none');
 
     allSlices.selectAll('text.path-label textPath')
-      .text(d => accessorFn(state.label)(d.data));
+      .text(d => nameOf(d.data));
 
     //
 
@@ -233,7 +227,7 @@ export default Kapsule({
       const deltaAngle = state.angleScale(d.x1) - state.angleScale(d.x0);
       const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
       const perimeter = r * deltaAngle;
-      return accessorFn(state.label)(d.data).toString().length * CHAR_PX < perimeter;
+      return nameOf(d.data).toString().length * CHAR_PX < perimeter;
     }
 
     function getNodeStack(d) {
