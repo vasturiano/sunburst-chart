@@ -35,6 +35,7 @@
             .color(d => color(d.name))
             .minSliceAngle(.8)
             .showLabels(false)
-            (document.getElementById('chart'));
+            .tooltipContent((d, node) => `Size: <i>${node.value}</i>`)
+        (document.getElementById('chart'));
     </script>
 </body>

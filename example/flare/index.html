@@ -18,6 +18,7 @@
                 .label('name')
                 .size('size')
                 .color((d, parent) => color(parent ? parent.data.name : null))
+                .tooltipContent((d, node) => `Size: <i>${node.value}</i>`)
                 (document.getElementById('chart'));
         });
     </script>
