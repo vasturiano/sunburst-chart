@@ -27,6 +27,7 @@ export default Kapsule({
     },
     color: { default: d => 'lightgrey' },
     minSliceAngle: { default: .2 },
+    showLabels: { default: true },
     tooltipContent: { default: d => '', triggerUpdate: false },
     focusOnNode: {
       onChange: function(d, state) {
@@ -52,7 +53,7 @@ export default Kapsule({
 
         const hierData = d3Hierarchy(state.data, accessorFn(state.children))
           .sum(accessorFn(state.size))
-          .sort((a, b) => nameOf(a.data).localeCompare(nameOf(b.data)));
+          .sort((a, b) => nameOf(a.data).toString().localeCompare(nameOf(b.data).toString()));
 
         d3Partition().padding(0)(hierData);
 
@@ -205,7 +206,7 @@ export default Kapsule({
 
     allSlices.select('.path-label')
       .transition(transition)
-        .styleTween('display', d => () => textFits(d) ? null : 'none');
+        .styleTween('display', d => () => state.showLabels && textFits(d) ? null : 'none');
 
     allSlices.selectAll('text.path-label textPath')
       .text(d => accessorFn(state.label)(d.data));
@@ -232,7 +233,7 @@ export default Kapsule({
       const deltaAngle = state.angleScale(d.x1) - state.angleScale(d.x0);
       const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
       const perimeter = r * deltaAngle;
-      return accessorFn(state.label)(d.data).length * CHAR_PX < perimeter;
+      return accessorFn(state.label)(d.data).toString().length * CHAR_PX < perimeter;
     }
 
     function getNodeStack(d) {
