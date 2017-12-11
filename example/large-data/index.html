@@ -33,7 +33,7 @@
         Sunburst()
             .data(genNode('root'))
             .color(d => color(d.name))
-            .minSliceAngle(.8)
+            .minSliceAngle(.4)
             .showLabels(false)
             .tooltipContent((d, node) => `Size: <i>${node.value}</i>`)
         (document.getElementById('chart'));
