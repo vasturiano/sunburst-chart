@@ -1,6 +1,6 @@
 import { select as d3Select, event as d3Event } from 'd3-selection';
 import { scaleLinear, scaleSqrt } from 'd3-scale';
-import { stratify as d3Stratify, hierarchy as d3Hierarchy, partition as d3Partition } from 'd3-hierarchy';
+import { hierarchy as d3Hierarchy, partition as d3Partition } from 'd3-hierarchy';
 import { arc as d3Arc } from 'd3-shape';
 import { path as d3Path } from 'd3-path';
 import { interpolate as d3Interpolate } from 'd3-interpolate';
