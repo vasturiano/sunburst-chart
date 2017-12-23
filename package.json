@@ -4,7 +4,7 @@
   "description": "Sunburst interactive chart web component for visualizing hierarchical data",
   "unpkg": "dist/sunburst-chart.min.js",
   "main": "dist/sunburst-chart.common.js",
-  "module": "dist/sunburst-chart.mjs",
+  "module": "dist/sunburst-chart.module.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vasturiano/sunburst-chart.git"
