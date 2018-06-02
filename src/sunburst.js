@@ -20,7 +20,8 @@ export default Kapsule({
     height: { default: window.innerHeight },
     data: { onChange: function() { this._parseData(); }},
     children: { default: 'children', onChange: function() { this._parseData(); }},
-    label: { default: d => d.name, onChange: function() { this._parseData(); }},
+    sort: { onChange: function() { this._parseData(); }},
+    label: { default: d => d.name },
     size: {
       default: 'value',
       onChange: function() { this._parseData(); }
@@ -49,11 +50,12 @@ export default Kapsule({
   methods: {
     _parseData: function(state) {
       if (state.data) {
-        const nameOf = accessorFn(state.label);
-
         const hierData = d3Hierarchy(state.data, accessorFn(state.children))
-          .sum(accessorFn(state.size))
-          .sort((a, b) => nameOf(a.data).toString().localeCompare(nameOf(b.data).toString()));
+          .sum(accessorFn(state.size));
+
+        if (state.sort) {
+          hierData.sort(state.sort);
+        }
 
         d3Partition().padding(0)(hierData);
 

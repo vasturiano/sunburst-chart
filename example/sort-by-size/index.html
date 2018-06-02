@@ -10,8 +10,8 @@
 
     <script>
 
-        const CHILDREN_PROB_DECAY = 0.15; // per level
-        const MAX_CHILDREN = 20;
+        const CHILDREN_PROB_DECAY = 0.5; // per level
+        const MAX_CHILDREN = 40;
         const MAX_VALUE = 100;
 
         function genNode(name='root', probOfChildren=1) {
@@ -33,6 +33,7 @@
 
         Sunburst()
             .data(genNode())
+            .sort((a, b) => b.value - a.value) // sort descending by size
             .color(d => color(d.name))
             .minSliceAngle(.4)
             .showLabels(false)
