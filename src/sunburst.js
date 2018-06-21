@@ -44,7 +44,8 @@ export default Kapsule({
             })
         }
       }
-    }
+    },
+    onNodeClick: { triggerUpdate: false }
   },
 
   methods: {
@@ -157,7 +158,7 @@ export default Kapsule({
       .style('opacity', 0)
       .on('click', d => {
         d3Event.stopPropagation();
-        this.focusOnNode(d);
+        (state.onNodeClick || this.focusOnNode)(d);
       })
       .on('mouseover', d => {
         state.tooltip.style('display', 'inline');
