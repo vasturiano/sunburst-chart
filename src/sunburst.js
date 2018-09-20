@@ -186,6 +186,7 @@ export default Kapsule({
       .attr('xlink:href', d => `#hidden-arc-${state.chartId}-${d.id}` );
 
     label.append('textPath')
+      .attr('class', 'text-stroke')
       .attr('startOffset','50%')
       .attr('xlink:href', d => `#hidden-arc-${state.chartId}-${d.id}` );
 
@@ -205,7 +206,11 @@ export default Kapsule({
       .transition(transition)
         .styleTween('display', d => () => state.showLabels && textFits(d) ? null : 'none');
 
-    allSlices.selectAll('text.path-label textPath')
+    // Ensure propagation of data to children
+    allSlices.selectAll('text.path-label').select('textPath.text-contour');
+    allSlices.selectAll('text.path-label').select('textPath.text-stroke');
+
+    allSlices.selectAll('text.path-label').selectAll('textPath')
       .text(d => nameOf(d.data));
 
     //
