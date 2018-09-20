@@ -43,7 +43,7 @@
   border-radius: 3px;
   font: 12px sans-serif;
   color: #eee;
-  background: rgba(0,0,140,0.7);
+  background: rgba(0,0,0,0.65);
   pointer-events: none;
 }
 
