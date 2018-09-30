@@ -33,7 +33,7 @@ export default Kapsule({
     focusOnNode: {
       onChange: function(d, state) {
         if (d && state.initialised) {
-          moveStackToFront(d);
+          moveStackToFront(d.__dataNode);
         }
 
         function moveStackToFront(elD) {
@@ -60,7 +60,10 @@ export default Kapsule({
 
         d3Partition().padding(0)(hierData);
 
-        hierData.descendants().forEach((d, i) => d.id = i); // Mark each node with a unique ID
+        hierData.descendants().forEach((d, i) => {
+          d.id = i; // Mark each node with a unique ID
+          d.data.__dataNode = d; // Dual-link data nodes
+        });
 
         state.layoutData = hierData.descendants();
       }
@@ -119,7 +122,7 @@ export default Kapsule({
 
     if (!state.layoutData) return;
 
-    const focusD = state.focusOnNode || { x0: 0, x1: 1, y0: 0, y1: 1 };
+    const focusD = (state.focusOnNode && state.focusOnNode.__dataNode) || { x0: 0, x1: 1, y0: 0, y1: 1 };
 
     const slice = state.canvas.selectAll('.slice')
       .data(
@@ -158,7 +161,7 @@ export default Kapsule({
       .style('opacity', 0)
       .on('click', d => {
         d3Event.stopPropagation();
-        (state.onNodeClick || this.focusOnNode)(d);
+        (state.onNodeClick || this.focusOnNode)(d.data);
       })
       .on('mouseover', d => {
         state.tooltip.style('display', 'inline');
