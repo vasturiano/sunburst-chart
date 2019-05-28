@@ -108,7 +108,7 @@ export default Kapsule({
     });
 
     // Reset focus by clicking on canvas
-    state.svg.on('click', () => this.focusOnNode(null));
+    state.svg.on('click', () => (state.onNodeClick || this.focusOnNode)(state.data));
   },
 
   update: function(state) {
