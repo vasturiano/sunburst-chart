@@ -1,4 +1,9 @@
-# Sunburst Chart
+Sunburst Chart
+==============
+
+[![NPM package][npm-img]][npm-url]
+[![Build Size][build-size-img]][build-size-url]
+[![Dependencies][dependencies-img]][dependencies-url]
 
 <p align="center">
      <a href="https://vasturiano.github.io/sunburst-chart/example/flare/"><img width="80%" src="https://vasturiano.github.io/sunburst-chart/example/flare/screenshot.png"></a>
@@ -11,8 +16,6 @@ The chart also responds to data changes by animating the arcs of each of the nod
 The arcs areas are linearly proportional to their data values, resulting in a decrease of the thickness of the outer layers in a quadratic fashion.
 
 For improved performance, arcs smaller than a given threshold (`minSliceAngle`) are excluded from the DOM, allowing for representation of large data sets while maintaining a smooth interaction. See [here for an example](https://vasturiano.github.io/sunburst-chart/example/large-data) of a randomly generated large data structure.
-
-[![NPM](https://nodei.co/npm/sunburst-chart.png?compact=true)](https://nodei.co/npm/sunburst-chart/)
 
 ## Quick start
 
@@ -79,3 +82,14 @@ myChart
   ]
 }
 ```
+
+## Giving Back
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url) If this project has helped you and you'd like to contribute back, you can always [buy me a ☕](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url)!
+
+[npm-img]: https://img.shields.io/npm/v/sunburst-chart.svg
+[npm-url]: https://npmjs.org/package/sunburst-chart
+[build-size-img]: https://img.shields.io/bundlephobia/minzip/sunburst-chart.svg
+[build-size-url]: https://bundlephobia.com/result?p=sunburst-chart
+[dependencies-img]: https://img.shields.io/david/vasturiano/sunburst-chart.svg
+[dependencies-url]: https://david-dm.org/vasturiano/sunburst-chart
