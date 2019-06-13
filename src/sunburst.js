@@ -45,7 +45,7 @@ export default Kapsule({
         }
       }
     },
-    onNodeClick: { triggerUpdate: false }
+    onClick: { triggerUpdate: false }
   },
 
   methods: {
@@ -68,6 +68,10 @@ export default Kapsule({
         state.layoutData = hierData.descendants();
       }
     }
+  },
+
+  aliases: {
+    onNodeClick: 'onClick'
   },
 
   init: function(domNode, state) {
@@ -109,7 +113,7 @@ export default Kapsule({
     });
 
     // Reset focus by clicking on canvas
-    state.svg.on('click', () => this.focusOnNode(null));
+    state.svg.on('click', () => (state.onClick || this.focusOnNode)(null)); // By default reset zoom when clicking on canvas
   },
 
   update: function(state) {
@@ -162,7 +166,7 @@ export default Kapsule({
       .style('opacity', 0)
       .on('click', d => {
         d3Event.stopPropagation();
-        (state.onNodeClick || this.focusOnNode)(d.data);
+        (state.onClick || this.focusOnNode)(d.data);
       })
       .on('mouseover', d => {
         state.tooltip.style('display', 'inline');
