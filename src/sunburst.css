@@ -37,8 +37,7 @@
   display: none;
   position: absolute;
   max-width: 320px;
-  margin-top: 20px;
-  margin-left: 8px;
+  white-space: nowrap;
   padding: 5px;
   border-radius: 3px;
   font: 12px sans-serif;
@@ -50,4 +49,5 @@
 .sunburst-tooltip .tooltip-title {
   font-weight: bold;
   text-align: center;
+  margin-bottom: 5px;
 }
