@@ -17,7 +17,7 @@ The arcs areas are linearly proportional to their data values, resulting in a de
 
 For improved performance, arcs smaller than a given threshold (`minSliceAngle`) are excluded from the DOM, allowing for representation of large data sets while maintaining a smooth interaction. See [here for an example](https://vasturiano.github.io/sunburst-chart/example/large-data) of a randomly generated large data structure.
 
-See also the [Icicle chart](https://github.com/vasturiano/icicle-chart) and [Treemap](https://github.com/vasturiano/treemap-chart).
+See also the [Icicle](https://github.com/vasturiano/icicle-chart), [Circle Pack](https://github.com/vasturiano/circlepack-chart) and [Treemap](https://github.com/vasturiano/treemap-chart) charts.
 
 ## Quick start
 
