@@ -8,8 +8,6 @@ import { transition as d3Transition } from 'd3-transition';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
 
-import './sunburst.css';
-
 const TRANSITION_DURATION = 750;
 const CHAR_PX = 6;
 
