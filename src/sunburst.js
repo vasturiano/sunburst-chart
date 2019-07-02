@@ -39,6 +39,7 @@ export default Kapsule({
     showLabels: { default: true },
     tooltipContent: { default: d => '', triggerUpdate: false },
     tooltipTitle: { default: null, triggerUpdate: false },
+    tooltipShow: { default: d => true, triggerUpdate: false},
     focusOnNode: {
       onChange: function(d, state) {
         if (d && state.initialised) {
@@ -182,7 +183,7 @@ export default Kapsule({
         (state.onClick || this.focusOnNode)(d.data);
       })
       .on('mouseover', d => {
-        state.tooltip.style('display', 'inline');
+        state.tooltip.style('display', state.tooltipShow(d.data) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
           state.tooltipTitle ? state.tooltipTitle(d) : this._tooltipTitle(d)
         }</div>${state.tooltipContent(d.data, d)}`);
