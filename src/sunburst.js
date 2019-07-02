@@ -11,6 +11,16 @@ import accessorFn from 'accessor-fn';
 const TRANSITION_DURATION = 750;
 const CHAR_PX = 6;
 
+function getNodeStack(d) {
+  const stack = [];
+  let curNode = d;
+  while (curNode) {
+    stack.unshift(curNode);
+    curNode = curNode.parent;
+  }
+  return stack;
+}
+
 export default Kapsule({
 
   props: {
@@ -28,6 +38,7 @@ export default Kapsule({
     minSliceAngle: { default: .2 },
     showLabels: { default: true },
     tooltipContent: { default: d => '', triggerUpdate: false },
+    tooltipTitle: { default: null, triggerUpdate: false },
     focusOnNode: {
       onChange: function(d, state) {
         if (d && state.initialised) {
@@ -65,6 +76,10 @@ export default Kapsule({
 
         state.layoutData = hierData.descendants();
       }
+    },
+    _tooltipTitle: function(state, d) {
+      const nameOf = accessorFn(state.label);
+      return getNodeStack(d).map(d => nameOf(d.data)).join(' > ');
     }
   },
 
@@ -169,7 +184,7 @@ export default Kapsule({
       .on('mouseover', d => {
         state.tooltip.style('display', 'inline');
         state.tooltip.html(`<div class="tooltip-title">${
-          getNodeStack(d).map(d => nameOf(d.data)).join(' > ')
+          state.tooltipTitle ? state.tooltipTitle(d) : this._tooltipTitle(d)
         }</div>${state.tooltipContent(d.data, d)}`);
       })
       .on('mouseout', () => { state.tooltip.style('display', 'none'); });
@@ -242,16 +257,6 @@ export default Kapsule({
       const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
       const perimeter = r * deltaAngle;
       return nameOf(d.data).toString().length * CHAR_PX < perimeter;
-    }
-
-    function getNodeStack(d) {
-      const stack = [];
-      let curNode = d;
-      while (curNode) {
-        stack.unshift(curNode);
-        curNode = curNode.parent;
-      }
-      return stack;
     }
   }
 });
