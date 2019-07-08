@@ -107,7 +107,7 @@ export default Kapsule({
       state.tooltip
         .style('left', d3Event.pageX + 'px')
         .style('top', d3Event.pageY + 'px')
-        .style('transform', `translate(-${d3Event.pageX / state.width * 100}%, 21px)`); // adjust horizontal position to not exceed canvas boundaries
+        .style('transform', `translate(-${d3Event.offsetX / state.width * 100}%, 21px)`); // adjust horizontal position to not exceed canvas boundaries
     });
 
     // Reset focus by clicking on canvas
