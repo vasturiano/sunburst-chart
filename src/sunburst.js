@@ -26,6 +26,7 @@ export default Kapsule({
     },
     color: { default: d => 'lightgrey' },
     minSliceAngle: { default: .2 },
+    maxLevels: {},
     showLabels: { default: true },
     tooltipContent: { default: d => '', triggerUpdate: false },
     focusOnNode: {
@@ -130,10 +131,11 @@ export default Kapsule({
     const slice = state.canvas.selectAll('.slice')
       .data(
         state.layoutData
-          .filter(d => // Show only slices with a large enough angle
+          .filter(d => // Show only slices with a large enough angle and within the max levels
             d.x1 >= focusD.x0
             && d.x0 <= focusD.x1
             && (d.x1-d.x0)/(focusD.x1-focusD.x0) > state.minSliceAngle/360
+            && (!state.maxLevels || d.depth - (focusD.depth || 0) < state.maxLevels)
           ),
         d => d.id
       );
@@ -142,11 +144,14 @@ export default Kapsule({
     const colorOf = accessorFn(state.color);
     const transition = d3Transition().duration(TRANSITION_DURATION);
 
+    const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
+    const maxY = state.maxLevels ? Math.min(1, focusD.y0 + state.maxLevels * levelYDelta) : 1;
+
     // Apply zoom
     state.svg.transition(transition)
       .tween('scale', () => {
         const xd = d3Interpolate(state.angleScale.domain(), [focusD.x0, focusD.x1]);
-        const yd = d3Interpolate(state.radiusScale.domain(), [focusD.y0, 1]);
+        const yd = d3Interpolate(state.radiusScale.domain(), [focusD.y0, maxY]);
         return t => {
           state.angleScale.domain(xd(t));
           state.radiusScale.domain(yd(t));
