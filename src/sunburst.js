@@ -145,7 +145,8 @@ export default Kapsule({
     const transition = d3Transition().duration(TRANSITION_DURATION);
 
     const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
-    const maxY = state.maxLevels ? Math.min(1, focusD.y0 + state.maxLevels * levelYDelta) : 1;
+    const crntMaxLvlv = state.maxLevels ? Math.min(state.maxLevels, focusD.height + 1 || state.maxLevels) : 1;
+    const maxY = state.maxLevels ? Math.min(1, focusD.y0 + crntMaxLvl * levelYDelta) : 1;
 
     // Apply zoom
     state.svg.transition(transition)
