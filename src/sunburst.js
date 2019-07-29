@@ -11,16 +11,6 @@ import accessorFn from 'accessor-fn';
 const TRANSITION_DURATION = 750;
 const CHAR_PX = 6;
 
-function getNodeStack(d) {
-  const stack = [];
-  let curNode = d;
-  while (curNode) {
-    stack.unshift(curNode);
-    curNode = curNode.parent;
-  }
-  return stack;
-}
-
 export default Kapsule({
 
   props: {
@@ -77,10 +67,6 @@ export default Kapsule({
 
         state.layoutData = hierData.descendants();
       }
-    },
-    _tooltipTitle: function(state, d) {
-      const nameOf = accessorFn(state.label);
-      return getNodeStack(d).map(d => nameOf(d.data)).join(' > ');
     }
   },
 
@@ -185,7 +171,7 @@ export default Kapsule({
       .on('mouseover', d => {
         state.tooltip.style('display', state.tooltipShow(d.data) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
-          state.tooltipTitle ? state.tooltipTitle(d) : this._tooltipTitle(d)
+          state.tooltipTitle ? state.tooltipTitle(d) : getNodeStack(d).map(d => nameOf(d.data)).join(' > ')
         }</div>${state.tooltipContent(d.data, d)}`);
       })
       .on('mouseout', () => { state.tooltip.style('display', 'none'); });
@@ -258,6 +244,16 @@ export default Kapsule({
       const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
       const perimeter = r * deltaAngle;
       return nameOf(d.data).toString().length * CHAR_PX < perimeter;
+    }
+
+    function getNodeStack(d) {
+      const stack = [];
+      let curNode = d;
+      while (curNode) {
+        stack.unshift(curNode);
+        curNode = curNode.parent;
+      }
+      return stack;
     }
   }
 });
