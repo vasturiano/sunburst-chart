@@ -35,6 +35,7 @@
       .data(genNode())
       .color(d => color(d.name))
       .minSliceAngle(.4)
+      .excludeRoot(true)
       .maxLevels(6)
       .showLabels(false)
       .tooltipContent((d, node) => `Size: <i>${node.value}</i>`)

@@ -16,14 +16,11 @@ export default Kapsule({
   props: {
     width: { default: window.innerWidth },
     height: { default: window.innerHeight },
-    data: { onChange: function() { this._parseData(); }},
-    children: { default: 'children', onChange: function() { this._parseData(); }},
-    sort: { onChange: function() { this._parseData(); }},
+    data: { onChange(_, state) { state.needsReparse = true }},
+    children: { default: 'children', onChange(_, state) { state.needsReparse = true }},
+    sort: { onChange(_, state) { state.needsReparse = true }},
     label: { default: d => d.name },
-    size: {
-      default: 'value',
-      onChange: function() { this._parseData(); }
-    },
+    size: { default: 'value', onChange(_, state) { state.needsReparse = true }},
     color: { default: d => 'lightgrey' },
     minSliceAngle: { default: .2 },
     maxLevels: {},
@@ -44,6 +41,7 @@ export default Kapsule({
         }
       }
     },
+    excludeRoot: { default: false, onChange(_, state) { state.needsReparse = true }},
     onClick: { triggerUpdate: false }
   },
 
@@ -58,6 +56,17 @@ export default Kapsule({
         }
 
         d3Partition().padding(0)(hierData);
+
+        if (state.excludeRoot) {
+          // re-scale y values if excluding root
+          const yScale = scaleLinear()
+            .domain([hierData.y1 - hierData.y0, 1]);
+
+          hierData.descendants().forEach(d => {
+            d.y0 = yScale(d.y0);
+            d.y1 = yScale(d.y1);
+          });
+        }
 
         hierData.descendants().forEach((d, i) => {
           d.id = i; // Mark each node with a unique ID
@@ -116,6 +125,11 @@ export default Kapsule({
   },
 
   update: function(state) {
+    if (state.needsReparse) {
+      this._parseData();
+      state.needsReparse = false;
+    }
+
     const maxRadius = (Math.min(state.width, state.height) / 2);
     state.radiusScale.range([maxRadius * .1, maxRadius]);
 
@@ -126,7 +140,9 @@ export default Kapsule({
 
     if (!state.layoutData) return;
 
-    const focusD = (state.focusOnNode && state.focusOnNode.__dataNode) || { x0: 0, x1: 1, y0: 0, y1: 1 };
+    const focusD =
+      (state.focusOnNode && state.focusOnNode.__dataNode.y0 >= 0 && state.focusOnNode.__dataNode)
+      || { x0: 0, x1: 1, y0: 0, y1: 1 };
 
     const slice = state.canvas.selectAll('.slice')
       .data(
@@ -136,6 +152,7 @@ export default Kapsule({
             && d.x0 <= focusD.x1
             && (d.x1-d.x0)/(focusD.x1-focusD.x0) > state.minSliceAngle/360
             && (!state.maxLevels || d.depth - (focusD.depth || 0) < state.maxLevels)
+            && (d.y0 >=0 || focusD.parent) // hide negative layers on top level
           ),
         d => d.id
       );
