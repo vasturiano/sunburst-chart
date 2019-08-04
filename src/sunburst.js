@@ -26,6 +26,8 @@ export default Kapsule({
     maxLevels: {},
     showLabels: { default: true },
     tooltipContent: { default: d => '', triggerUpdate: false },
+    tooltipTitle: { default: null, triggerUpdate: false },
+    showTooltip: { default: d => true, triggerUpdate: false},
     focusOnNode: {
       onChange: function(d, state) {
         if (d && state.initialised) {
@@ -192,9 +194,9 @@ export default Kapsule({
         (state.onClick || this.focusOnNode)(d.data);
       })
       .on('mouseover', d => {
-        state.tooltip.style('display', 'inline');
+        state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
-          getNodeStack(d).map(d => nameOf(d.data)).join(' > ')
+          state.tooltipTitle ? state.tooltipTitle(d.data, d) : getNodeStack(d).map(d => nameOf(d.data)).join(' > ')
         }</div>${state.tooltipContent(d.data, d)}`);
       })
       .on('mouseout', () => { state.tooltip.style('display', 'none'); });
