@@ -196,7 +196,7 @@ export default Kapsule({
       .on('mouseover', d => {
         state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
-          state.tooltipTitle ? state.tooltipTitle(d.data, d) : getNodeStack(d).map(d => nameOf(d.data)).join(' > ')
+          state.tooltipTitle ? state.tooltipTitle(d.data, d) : getNodeStack(d).map(d => nameOf(d.data)).join(' &rarr; ')
         }</div>${state.tooltipContent(d.data, d)}`);
       })
       .on('mouseout', () => { state.tooltip.style('display', 'none'); });
