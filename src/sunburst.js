@@ -44,7 +44,8 @@ export default Kapsule({
       }
     },
     excludeRoot: { default: false, onChange(_, state) { state.needsReparse = true }},
-    onClick: { triggerUpdate: false }
+    onClick: { triggerUpdate: false },
+    onHover: { triggerUpdate: false }
   },
 
   methods: {
@@ -123,7 +124,10 @@ export default Kapsule({
     });
 
     // Reset focus by clicking on canvas
-    state.svg.on('click', () => (state.onClick || this.focusOnNode)(null)); // By default reset zoom when clicking on canvas
+    state.svg
+      .on('click', () => (state.onClick || this.focusOnNode)(null)) // By default reset zoom when clicking on canvas
+      .on('mouseover', () => state.onHover && state.onHover(null));
+
   },
 
   update: function(state) {
@@ -194,6 +198,9 @@ export default Kapsule({
         (state.onClick || this.focusOnNode)(d.data);
       })
       .on('mouseover', d => {
+        d3Event.stopPropagation();
+        state.onHover && state.onHover(d.data);
+        
         state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
           state.tooltipTitle

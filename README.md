@@ -60,6 +60,7 @@ myChart
 | <b>tooltipTitle</b>([<i>fn</i>]) | Getter/setter for a node object tooltip title. The function should return a string to be displayed in bold in the first line of the tooltip. If unspecified, the full hierarchical name will be displayed. | |
 | <b>tooltipContent</b>([<i>string</i> or <i>fn</i>]) | Getter/setter for a node object tooltip content accessor. Use this to specify extra content in each of the arc's tooltips in addition to the title set in `tooltipTitle`. | |
 | <b>focusOnNode</b>([<i>object</i>]) | Getter/setter for the data node to focus the chart on. Use this method to retrieve the current node in focus, or to programmatically zoom the chart to a particular node. | |
+| <b>onHover</b>([<i>fn</i>]) | Callback function for mouse hover events. Includes the data node object (or `null` if hovering on background) as single argument. | |
 | <b>onClick</b>([<i>fn</i>]) | Callback function for click events. Includes the data node object (or `null` if clicking on background) as single argument. A falsy value (default) automatically focuses on clicked nodes, equivalent to `myChart.onClick(myChart.focusOnNode)`. | |
 
 ## Data syntax
