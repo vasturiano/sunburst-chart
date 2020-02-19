@@ -14,8 +14,8 @@ const CHAR_PX = 6;
 export default Kapsule({
 
   props: {
-    width: { default: window.innerWidth },
-    height: { default: window.innerHeight },
+    width: { default: '500px' },
+    height: { default: '500px' },
     data: { onChange(_, state) { state.needsReparse = true }},
     children: { default: 'children', onChange(_, state) { state.needsReparse = true }},
     sort: { onChange(_, state) { state.needsReparse = true }},
