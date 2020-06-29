@@ -58,8 +58,8 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
 
   showLabels(): boolean;
   showLabels(show: boolean): ChainableInstance;
-  showTooltip(): boolean;
-  showTooltip(show: boolean): ChainableInstance;
+  showTooltip(): (node: Node) => boolean;
+  showTooltip(showTooltipFn: (node: Node) => boolean): ChainableInstance;
   tooltipTitle(): TooltipFn;
   tooltipTitle(fn: TooltipFn): ChainableInstance;
   tooltipContent(): TooltipFn;
