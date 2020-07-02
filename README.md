@@ -62,6 +62,7 @@ myChart
 | <b>focusOnNode</b>([<i>object</i>]) | Getter/setter for the data node to focus the chart on. Use this method to retrieve the current node in focus, or to programmatically zoom the chart to a particular node. | |
 | <b>onHover</b>([<i>fn</i>]) | Callback function for mouse hover events. Includes the data node object (or `null` if hovering on background) as single argument. | |
 | <b>onClick</b>([<i>fn</i>]) | Callback function for click events. Includes the data node object (or `null` if clicking on background) as single argument. A falsy value (default) automatically focuses on clicked nodes, equivalent to `myChart.onClick(myChart.focusOnNode)`. | |
+| <b>centerPercent</b>([<i>number</i>]) | Getter/setter for the size of the center circle (percentage of the width). | *&lt;10% of window height&gt;* |
 
 ## Data syntax
 

@@ -16,6 +16,7 @@ export default Kapsule({
   props: {
     width: { default: window.innerWidth },
     height: { default: window.innerHeight },
+    centerPercent: { default: 10 },
     data: { onChange(_, state) { state.needsReparse = true }},
     children: { default: 'children', onChange(_, state) { state.needsReparse = true }},
     sort: { onChange(_, state) { state.needsReparse = true }},
@@ -137,7 +138,8 @@ export default Kapsule({
     }
 
     const maxRadius = (Math.min(state.width, state.height) / 2);
-    state.radiusScale.range([maxRadius * .1, maxRadius]);
+    const innerPercent = (state.centerPercent / 100).toFixed(2);
+    state.radiusScale.range([maxRadius * innerPercent, maxRadius]);
 
     state.svg
       .style('width', state.width + 'px')
