@@ -48,20 +48,20 @@
     "kapsule": "^1.13.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "@babel/plugin-proposal-class-properties": "^7.10.1",
-    "@babel/plugin-proposal-object-rest-spread": "^7.10.3",
-    "@babel/preset-env": "^7.10.3",
+    "@babel/core": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
-    "postcss-nested": "^4.2.1",
+    "postcss-nested": "^4.2.2",
     "postcss-simple-vars": "^5.0.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.18.1",
+    "rollup": "^2.20.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-dts": "^1.4.7",
     "rollup-plugin-postcss": "^3.1.2",
     "rollup-plugin-terser": "^6.1.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.6"
   }
 }
