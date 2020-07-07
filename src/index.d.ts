@@ -17,7 +17,6 @@ export interface DataNode {
   height: number;
   parent: DataNode | null;
   children?: DataNode[];
-  centerPercent?:number;
   x0?: number;
   y0?: number;
   x1?: number;
@@ -35,8 +34,6 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   width(width: number): ChainableInstance;
   height(): number;
   height(height: number): ChainableInstance;
-  centerPercent(): number;
-  centerPercent(height: number): ChainableInstance;
 
   data(): Node;
   data(rootNode: Node): ChainableInstance;
@@ -55,6 +52,8 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   maxLevels(degrees: number): ChainableInstance;
   excludeRoot(): boolean;
   excludeRoot(exclude: boolean): ChainableInstance;
+  centerRadius(): number;
+  centerRadius(radiusRatio: number): ChainableInstance;
 
   sort(): CompareFn<Node> | null;
   sort(cmpFn: CompareFn<Node> | null);
