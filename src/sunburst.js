@@ -1,5 +1,5 @@
 import { select as d3Select, event as d3Event } from 'd3-selection';
-import { scaleLinear, scaleSqrt } from 'd3-scale';
+import { scaleLinear, scalePow } from 'd3-scale';
 import { hierarchy as d3Hierarchy, partition as d3Partition } from 'd3-hierarchy';
 import { arc as d3Arc } from 'd3-shape';
 import { path as d3Path } from 'd3-path';
@@ -24,6 +24,9 @@ export default Kapsule({
     color: { default: d => 'lightgrey' },
     minSliceAngle: { default: .2 },
     maxLevels: {},
+    excludeRoot: { default: false, onChange(_, state) { state.needsReparse = true }},
+    centerRadius: { default: 0.1 },
+    radiusScaleExponent: { default: 0.5 }, // radius decreases quadratically outwards to preserve area
     showLabels: { default: true },
     tooltipContent: { default: d => '', triggerUpdate: false },
     tooltipTitle: { default: null, triggerUpdate: false },
@@ -43,8 +46,6 @@ export default Kapsule({
         }
       }
     },
-    centerRadius: { default: 0.1 },
-    excludeRoot: { default: false, onChange(_, state) { state.needsReparse = true }},
     onClick: { triggerUpdate: false },
     onHover: { triggerUpdate: false }
   },
@@ -89,7 +90,7 @@ export default Kapsule({
   init: function(domNode, state) {
     state.chartId = Math.round(Math.random() * 1e12); // Unique ID for DOM elems
 
-    state.radiusScale = scaleSqrt();
+    state.radiusScale = scalePow();
     state.angleScale = scaleLinear()
       .domain([0, 10]) // For initial build-in animation
       .range([0, 2 * Math.PI])
@@ -139,6 +140,8 @@ export default Kapsule({
 
     const maxRadius = (Math.min(state.width, state.height) / 2);
     state.radiusScale.range([maxRadius * Math.max(0, Math.min(1, state.centerRadius)), maxRadius]);
+
+    state.radiusScaleExponent > 0 && state.radiusScale.exponent(state.radiusScaleExponent);
 
     state.svg
       .style('width', state.width + 'px')

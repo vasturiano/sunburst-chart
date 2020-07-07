@@ -13,7 +13,8 @@ An interactive sunburst chart for representing hierarchical data, where each dat
 
 Clicking on an arc focuses the view on the associated sub-tree, enabling a gradual exploration of the data. Clicking in the chart's center zooms out one level, while clicking on the canvas resets the zoom level to the root view.
 The chart also responds to data changes by animating the arcs of each of the nodes into their new positions. 
-The arcs areas are linearly proportional to their data values, resulting in a decrease of the thickness of the outer layers in a quadratic fashion.
+
+By default the arcs areas are linearly proportional to their data values, resulting in a decrease of the thickness of the outer layers in a quadratic fashion. This can however be customized using the `radiusScaleExponent` method.
 
 For improved performance, arcs smaller than a given threshold (`minSliceAngle`) are excluded from the DOM, allowing for representation of large data sets while maintaining a smooth interaction. See [here for an example](https://vasturiano.github.io/sunburst-chart/example/large-data) of a randomly generated large data structure.
 
@@ -55,6 +56,7 @@ myChart
 | <b>maxLevels</b>([<i>number</i>]) | Getter/setter for the maximum number of layers to show at any given time. | - |
 | <b>excludeRoot</b>([<i>boolean</i>]) | Getter/setter for whether to exclude the root node from the top level representation, to maximize the available radial space. | `false` |
 | <b>centerRadius</b>([<i>number</i>]) | Getter/setter for the relative radius of the center circle. The value should be proportional to the whole chart radius. Only values between `<0, 1>` are permitted. | `0.1` |
+| <b>radiusScaleExponent</b>([<i>number</i>]) | Getter/setter for the exponent of the power scale used to calculate the thickness of the multi-layered rings. The default is `0.5` (square-root) which ensures the area of every segment remains proportional to their value, by decreasing the radius outwards in a quadratic fashion. For a linear scale, use `1`. Negatives values are not permitted. | `0.5` |
 | <b>sort</b>([<i>fn</i>]) | Getter/setter for the compare method used to sort sibling arcs. A value of `null` (*default*) maintains the existing order found in the input data structure. This method is equivalent to [d3-hierarchy's sort](https://github.com/d3/d3-hierarchy#node_sort), it receives two arguments representing two sibling arcs and expects a numeric return value (`-1`, `0` or `1`) indicating the order. Each element is an instance of [d3-hierarchy node](https://github.com/d3/d3-hierarchy#hierarchy) and has several useful properties to specify order: `data` (the corresponding data object), `value` (summed value of node and all its descendants) and `depth` (layer degree). For [example](https://vasturiano.github.io/sunburst-chart/example/sort-by-size/), to order arcs by angular size, use: `(a, b) => b.value - a.value`. | *&lt;existing order*&gt; |
 | <b>showLabels</b>([<i>boolean</i>]) | Getter/setter for whether to show labels in the arcs. Regardless of this setting, labels too large to fit within an arc's boundaries are automatically hidden. | `true` |
 | <b>showTooltip</b>([<i>fn</i>]) | Getter/setter to specify a node object tooltip's visibility. If this function returns `false` for a particular node, that node's tooltip will not display at all. If unspecified, all nodes' tooltips will display. | `() => true` |

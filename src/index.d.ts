@@ -54,6 +54,8 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   excludeRoot(exclude: boolean): ChainableInstance;
   centerRadius(): number;
   centerRadius(radiusRatio: number): ChainableInstance;
+  radiusScaleExponent(): number;
+  radiusScaleExponent(exponent: number): ChainableInstance;
 
   sort(): CompareFn<Node> | null;
   sort(cmpFn: CompareFn<Node> | null);
