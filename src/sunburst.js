@@ -1,4 +1,4 @@
-import { select as d3Select, event as d3Event } from 'd3-selection';
+import { select as d3Select, event as d3Event, mouse as d3Mouse } from 'd3-selection';
 import { scaleLinear, scalePow } from 'd3-scale';
 import { hierarchy as d3Hierarchy, partition as d3Partition } from 'd3-hierarchy';
 import { arc as d3Arc } from 'd3-shape';
@@ -109,20 +109,15 @@ export default Kapsule({
     state.canvas = state.svg.append('g');
 
     // tooltips
-    state.tooltip = d3Select('body')
-      .append('div')
-          .attr('class', 'sunburst-tooltip');
+    state.tooltip = el.append('div')
+      .attr('class', 'sunburst-tooltip');
 
-    // tooltip cleanup on unmount
-    domNode.addEventListener ('DOMNodeRemoved', function(e) {
-      if (e.target === this) { state.tooltip.remove(); }
-    });
-
-    state.canvas.on('mousemove', () => {
+    el.on('mousemove', function() {
+      const mousePos = d3Mouse(this);
       state.tooltip
-        .style('left', d3Event.pageX + 'px')
-        .style('top', d3Event.pageY + 'px')
-        .style('transform', `translate(-${d3Event.offsetX / state.width * 100}%, 21px)`); // adjust horizontal position to not exceed canvas boundaries
+        .style('left', mousePos[0] + 'px')
+        .style('top', mousePos[1] + 'px')
+        .style('transform', `translate(-${mousePos[0] / state.width * 100}%, 21px)`); // adjust horizontal position to not exceed canvas boundaries
     });
 
     // Reset focus by clicking on canvas
