@@ -33,6 +33,10 @@
   fill: none;
 }
 
+.sunburst-viz {
+  position: relative;
+}
+
 .sunburst-tooltip {
   display: none;
   position: absolute;
