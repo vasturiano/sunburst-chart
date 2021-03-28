@@ -1,6 +1,6 @@
 {
   "name": "sunburst-chart",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "description": "Sunburst interactive chart web component for visualizing hierarchical data",
   "license": "MIT",
   "unpkg": "dist/sunburst-chart.min.js",
