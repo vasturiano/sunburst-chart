@@ -1,4 +1,4 @@
-import { select as d3Select, event as d3Event, mouse as d3Mouse } from 'd3-selection';
+import { select as d3Select, pointer as d3Pointer } from 'd3-selection';
 import { scaleLinear, scalePow } from 'd3-scale';
 import { hierarchy as d3Hierarchy, partition as d3Partition } from 'd3-hierarchy';
 import { arc as d3Arc } from 'd3-shape';
@@ -114,8 +114,8 @@ export default Kapsule({
     state.tooltip = el.append('div')
       .attr('class', 'sunburst-tooltip');
 
-    el.on('mousemove', function() {
-      const mousePos = d3Mouse(this);
+    el.on('mousemove', function(ev) {
+      const mousePos = d3Pointer(ev);
       state.tooltip
         .style('left', mousePos[0] + 'px')
         .style('top', mousePos[1] + 'px')
@@ -194,12 +194,12 @@ export default Kapsule({
     const newSlice = slice.enter().append('g')
       .attr('class', 'slice')
       .style('opacity', 0)
-      .on('click', d => {
-        d3Event.stopPropagation();
+      .on('click', (ev, d) => {
+        ev.stopPropagation();
         (state.onClick || this.focusOnNode)(d.data);
       })
-      .on('mouseover', d => {
-        d3Event.stopPropagation();
+      .on('mouseover', (ev, d) => {
+        ev.stopPropagation();
         state.onHover && state.onHover(d.data);
         
         state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
@@ -308,13 +308,8 @@ export default Kapsule({
     }
 
     function radialTextTransform(d) {
-      const halfPi = Math.PI/2;
-      const angles = [state.angleScale(d.x0) - halfPi, state.angleScale(d.x1) - halfPi];
+      const middleAngle = (state.angleScale(d.x0) + state.angleScale(d.x1) - Math.PI) / 2;
       const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
-
-      if (!r || !(angles[1] - angles[0])) return null;
-
-      const middleAngle = (angles[1] + angles[0]) / 2;
 
       const x = r * Math.cos(middleAngle);
       const y = r * Math.sin(middleAngle);
