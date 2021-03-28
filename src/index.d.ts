@@ -23,6 +23,8 @@ export interface DataNode {
   y1?: number;
 }
 
+type Orientation = 'angular'|'radial'|'auto';
+
 type CompareFn<ItemType> = (a: ItemType, b: ItemType) => number;
 
 type TooltipFn = (node: Node, dataNode: DataNode) => string;
@@ -60,6 +62,8 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   sort(): CompareFn<Node> | null;
   sort(cmpFn: CompareFn<Node> | null);
 
+  labelOrientation(): Orientation;
+  labelOrientation(orientation: Orientation): ChainableInstance;
   showLabels(): boolean;
   showLabels(show: boolean): ChainableInstance;
   showTooltip(): (node: Node) => boolean;

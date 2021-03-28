@@ -11,7 +11,7 @@
   fill: #222;
 }
 
-.sunburst-viz text .text-contour {
+.sunburst-viz .text-contour {
   fill: none;
   stroke: white;
   stroke-width: 5;

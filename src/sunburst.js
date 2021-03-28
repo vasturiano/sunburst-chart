@@ -9,7 +9,8 @@ import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
 
 const TRANSITION_DURATION = 750;
-const CHAR_PX = 6;
+const CHAR_PX_WIDTH = 7;
+const CHAR_PX_HEIGHT = 14;
 
 export default Kapsule({
 
@@ -20,6 +21,7 @@ export default Kapsule({
     children: { default: 'children', onChange(_, state) { state.needsReparse = true }},
     sort: { onChange(_, state) { state.needsReparse = true }},
     label: { default: d => d.name },
+    labelOrientation: { default: 'auto' }, // angular, radial, auto
     size: { default: 'value', onChange(_, state) { state.needsReparse = true }},
     color: { default: d => 'lightgrey' },
     minSliceAngle: { default: .2 },
@@ -220,19 +222,25 @@ export default Kapsule({
       .attr('class', 'hidden-arc')
       .attr('id', d => `hidden-arc-${state.chartId}-${d.id}`);
 
-    const label = newSlice.append('text')
-        .attr('class', 'path-label');
+    // angular label
+    const angularLabel = newSlice.append('text')
+        .attr('class', 'angular-label');
 
     // Add white contour
-    label.append('textPath')
+    angularLabel.append('textPath')
       .attr('class', 'text-contour')
       .attr('startOffset','50%')
       .attr('xlink:href', d => `#hidden-arc-${state.chartId}-${d.id}` );
 
-    label.append('textPath')
+    angularLabel.append('textPath')
       .attr('class', 'text-stroke')
       .attr('startOffset','50%')
       .attr('xlink:href', d => `#hidden-arc-${state.chartId}-${d.id}` );
+
+    // radial label
+    const radialLabel = newSlice.append('g').attr('class', 'radial-label');
+    radialLabel.append('text').attr('class', 'text-contour'); // white contour
+    radialLabel.append('text').attr('class', 'text-stroke');
 
     // Entering + Updating
     const allSlices = slice.merge(newSlice);
@@ -243,19 +251,43 @@ export default Kapsule({
       .attrTween('d', d => () => state.arc(d))
       .style('fill', d => colorOf(d.data, d.parent));
 
-    allSlices.select('path.hidden-arc').transition(transition)
-      .attrTween('d', d => () => middleArcLine(d));
+    const computeAngularLabels = state.showLabels && ['angular', 'auto'].includes(state.labelOrientation.toLowerCase());
+    const computeRadialLabels = state.showLabels && ['radial', 'auto'].includes(state.labelOrientation.toLowerCase());
 
-    allSlices.select('.path-label')
+    if (computeAngularLabels) {
+      allSlices.select('path.hidden-arc').transition(transition)
+        .attrTween('d', d => () => middleArcLine(d));
+    }
+
+    // Ensure propagation of data to labels children
+    allSlices.selectAll('text.angular-label').select('textPath.text-contour');
+    allSlices.selectAll('text.angular-label').select('textPath.text-stroke');
+    allSlices.selectAll('g.radial-label').select('text.text-contour');
+    allSlices.selectAll('g.radial-label').select('text.text-stroke');
+
+    // Show/hide labels
+    allSlices.select('.angular-label')
       .transition(transition)
-        .styleTween('display', d => () => state.showLabels && textFits(d) ? null : 'none');
+        .styleTween('display', d => () => computeAngularLabels
+          && (state.labelOrientation === 'auto' ? autoPickLabelOrientation(d) === 'angular' : angularTextFits(d))
+          ? null : 'none'
+        );
 
-    // Ensure propagation of data to children
-    allSlices.selectAll('text.path-label').select('textPath.text-contour');
-    allSlices.selectAll('text.path-label').select('textPath.text-stroke');
+    allSlices.select('.radial-label')
+      .transition(transition)
+        .styleTween('display', d => () => computeRadialLabels
+          && (state.labelOrientation === 'auto' ? autoPickLabelOrientation(d) === 'radial' : radialTextFits(d))
+          ? null : 'none'
+        );
 
-    allSlices.selectAll('text.path-label').selectAll('textPath')
+    // Set labels
+    computeAngularLabels && allSlices.selectAll('text.angular-label').selectAll('textPath')
       .text(d => nameOf(d.data));
+
+    computeRadialLabels && allSlices.selectAll('g.radial-label').selectAll('text')
+      .text(d => nameOf(d.data))
+      .transition(transition)
+        .attrTween('transform', d => () => radialTextTransform(d));
 
     //
 
@@ -275,11 +307,47 @@ export default Kapsule({
       return path.toString();
     }
 
-    function textFits(d) {
+    function radialTextTransform(d) {
+      const halfPi = Math.PI/2;
+      const angles = [state.angleScale(d.x0) - halfPi, state.angleScale(d.x1) - halfPi];
+      const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
+
+      if (!r || !(angles[1] - angles[0])) return null;
+
+      const middleAngle = (angles[1] + angles[0]) / 2;
+
+      const x = r * Math.cos(middleAngle);
+      const y = r * Math.sin(middleAngle);
+      let rot = middleAngle * 180 / Math.PI;
+
+      middleAngle > Math.PI / 2 && middleAngle < Math.PI * 3/2 && (rot += 180); // prevent upside down text
+
+      return `translate(${x}, ${y}) rotate(${rot})`;
+    }
+
+    function angularTextFits(d) {
       const deltaAngle = state.angleScale(d.x1) - state.angleScale(d.x0);
       const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
       const perimeter = r * deltaAngle;
-      return nameOf(d.data).toString().length * CHAR_PX < perimeter;
+      return nameOf(d.data).toString().length * CHAR_PX_WIDTH < perimeter;
+    }
+
+    function radialTextFits(d) {
+      const availableHeight = state.radiusScale(d.y0) * (state.angleScale(d.x1) - state.angleScale(d.x0));
+      if (availableHeight < CHAR_PX_HEIGHT) return false; // not enough angular space
+
+      const availableLength = state.radiusScale(d.y1) - state.radiusScale(d.y0);
+      return nameOf(d.data).toString().length * CHAR_PX_WIDTH < availableLength;
+    }
+
+    function autoPickLabelOrientation(d) {
+      // prefer mode that keeps text most horizontal
+      const angle = ((state.angleScale(d.x0) + state.angleScale(d.x1)) / 2)%Math.PI;
+      const preferRadial = angle > Math.PI / 4 && angle < Math.PI * 3/4;
+
+      return preferRadial
+        ? (radialTextFits(d) ? 'radial' : angularTextFits(d) ? 'angular' : null)
+        : (angularTextFits(d) ? 'angular' : radialTextFits(d) ? 'radial' : null)
     }
 
     function getNodeStack(d) {
