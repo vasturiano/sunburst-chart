@@ -19,7 +19,6 @@
 }
 
 .sunburst-viz .main-arc {
-  stroke: white;
   stroke-width: 1px;
   transition: opacity .4s;
 }

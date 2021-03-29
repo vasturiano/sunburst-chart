@@ -24,6 +24,7 @@ export default Kapsule({
     labelOrientation: { default: 'auto' }, // angular, radial, auto
     size: { default: 'value', onChange(_, state) { state.needsReparse = true }},
     color: { default: d => 'lightgrey' },
+    strokeColor: { default: d => 'white' },
     minSliceAngle: { default: .2 },
     maxLevels: {},
     excludeRoot: { default: false, onChange(_, state) { state.needsReparse = true }},
@@ -166,6 +167,7 @@ export default Kapsule({
 
     const nameOf = accessorFn(state.label);
     const colorOf = accessorFn(state.color);
+    const strokeColorOf = accessorFn(state.strokeColor);
     const transition = d3Transition().duration(TRANSITION_DURATION);
 
     const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
@@ -216,6 +218,7 @@ export default Kapsule({
 
     newSlice.append('path')
       .attr('class', 'main-arc')
+      .style('stroke', d => strokeColorOf(d.data, d.parent))
       .style('fill', d => colorOf(d.data, d.parent));
 
     newSlice.append('path')
@@ -249,6 +252,7 @@ export default Kapsule({
 
     allSlices.select('path.main-arc').transition(transition)
       .attrTween('d', d => () => state.arc(d))
+      .style('stroke', d => strokeColorOf(d.data, d.parent))
       .style('fill', d => colorOf(d.data, d.parent));
 
     const computeAngularLabels = state.showLabels && ['angular', 'auto'].includes(state.labelOrientation.toLowerCase());
