@@ -47,6 +47,8 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   size(sizeAccessor: NodeAccessor<string>): ChainableInstance;
   color(): NodeAccessor<string>;
   color(colorAccessor: NodeAccessor<string>): ChainableInstance;
+  strokeColor(): NodeAccessor<string>;
+  strokeColor(colorAccessor: NodeAccessor<string>): ChainableInstance;
 
   minSliceAngle(): number;
   minSliceAngle(degrees: number): ChainableInstance;
