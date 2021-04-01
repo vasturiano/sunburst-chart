@@ -7,6 +7,7 @@ export interface Node {
   __dataNode?: DataNode;
   name?: string;
   children?: Node[];
+  [key: string]: any;
 }
 
 export interface DataNode {
