@@ -22,6 +22,7 @@ export default Kapsule({
     sort: { onChange(_, state) { state.needsReparse = true }},
     label: { default: d => d.name },
     labelOrientation: { default: 'auto' }, // angular, radial, auto
+    nodeClassName: { default: d => '' }, // Additional css classes to add on each slice node
     size: { default: 'value', onChange(_, state) { state.needsReparse = true }},
     color: { default: d => 'lightgrey' },
     strokeColor: { default: d => 'white' },
@@ -165,6 +166,7 @@ export default Kapsule({
         d => d.id
       );
 
+    const nodeClassNameOf = accessorFn(state.nodeClassName);
     const nameOf = accessorFn(state.label);
     const colorOf = accessorFn(state.color);
     const strokeColorOf = accessorFn(state.strokeColor);
@@ -194,7 +196,7 @@ export default Kapsule({
 
     // Entering
     const newSlice = slice.enter().append('g')
-      .attr('class', 'slice')
+      .attr('class', (d) => `slice ${nodeClassNameOf(d.data)}`)
       .style('opacity', 0)
       .on('click', (ev, d) => {
         ev.stopPropagation();
@@ -203,7 +205,7 @@ export default Kapsule({
       .on('mouseover', (ev, d) => {
         ev.stopPropagation();
         state.onHover && state.onHover(d.data);
-        
+
         state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
           state.tooltipTitle
