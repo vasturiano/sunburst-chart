@@ -25,6 +25,7 @@ export default Kapsule({
     size: { default: 'value', onChange(_, state) { state.needsReparse = true }},
     color: { default: d => 'lightgrey' },
     strokeColor: { default: d => 'white' },
+    strokeThickness: { default: d => 1 },
     minSliceAngle: { default: .2 },
     maxLevels: {},
     excludeRoot: { default: false, onChange(_, state) { state.needsReparse = true }},
@@ -168,6 +169,7 @@ export default Kapsule({
     const nameOf = accessorFn(state.label);
     const colorOf = accessorFn(state.color);
     const strokeColorOf = accessorFn(state.strokeColor);
+    const strokeThicknessOf = accessorFn(state.strokeThickness);
     const transition = d3Transition().duration(TRANSITION_DURATION);
 
     const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
@@ -203,7 +205,7 @@ export default Kapsule({
       .on('mouseover', (ev, d) => {
         ev.stopPropagation();
         state.onHover && state.onHover(d.data);
-        
+
         state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
           state.tooltipTitle
@@ -219,6 +221,7 @@ export default Kapsule({
     newSlice.append('path')
       .attr('class', 'main-arc')
       .style('stroke', d => strokeColorOf(d.data, d.parent))
+      .style('stroke-width', d => strokeThicknessOf(d.data, d.parent))
       .style('fill', d => colorOf(d.data, d.parent));
 
     newSlice.append('path')
@@ -253,6 +256,7 @@ export default Kapsule({
     allSlices.select('path.main-arc').transition(transition)
       .attrTween('d', d => () => state.arc(d))
       .style('stroke', d => strokeColorOf(d.data, d.parent))
+      .style('stroke-width', d => strokeThicknessOf(d.data, d.parent))
       .style('fill', d => colorOf(d.data, d.parent));
 
     const computeAngularLabels = state.showLabels && ['angular', 'auto'].includes(state.labelOrientation.toLowerCase());
