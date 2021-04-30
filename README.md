@@ -53,6 +53,7 @@ myChart
 | <b>size</b>([<i>string</i> or <i>fn</i>]) | Getter/setter for a node object size accessor, used to compute the angles of the arcs. | `value` |
 | <b>color</b>([<i>string</i> or <i>fn</i>]) | Getter/setter for a node object color accessor, used to color fill the arcs. | <i>grey</i> |
 | <b>strokeColor</b>([<i>string</i> or <i>fn</i>]) | Getter/setter for a node object stroke color accessor, used to color the contour of the arcs. | <i>white</i> |
+| <b>nodeClassName</b>([<i>string</i> or <i>fn</i>]) | Getter/setter for a node object classname accessor. Determines the CSS class(es) to apply to each slice node. | - |
 | <b>minSliceAngle</b>([<i>number</i>]) | Getter/setter for the minimum angle of an arc (in degrees) required for it to be rendered in the DOM. | `0.2` |
 | <b>maxLevels</b>([<i>number</i>]) | Getter/setter for the maximum number of layers to show at any given time. | - |
 | <b>excludeRoot</b>([<i>boolean</i>]) | Getter/setter for whether to exclude the root node from the top level representation, to maximize the available radial space. | `false` |

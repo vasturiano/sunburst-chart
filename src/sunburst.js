@@ -25,6 +25,7 @@ export default Kapsule({
     size: { default: 'value', onChange(_, state) { state.needsReparse = true }},
     color: { default: d => 'lightgrey' },
     strokeColor: { default: d => 'white' },
+    nodeClassName: {}, // Additional css classes to add on each slice node
     minSliceAngle: { default: .2 },
     maxLevels: {},
     excludeRoot: { default: false, onChange(_, state) { state.needsReparse = true }},
@@ -168,6 +169,7 @@ export default Kapsule({
     const nameOf = accessorFn(state.label);
     const colorOf = accessorFn(state.color);
     const strokeColorOf = accessorFn(state.strokeColor);
+    const nodeClassNameOf = accessorFn(state.nodeClassName);
     const transition = d3Transition().duration(TRANSITION_DURATION);
 
     const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
@@ -194,7 +196,6 @@ export default Kapsule({
 
     // Entering
     const newSlice = slice.enter().append('g')
-      .attr('class', 'slice')
       .style('opacity', 0)
       .on('click', (ev, d) => {
         ev.stopPropagation();
@@ -203,7 +204,7 @@ export default Kapsule({
       .on('mouseover', (ev, d) => {
         ev.stopPropagation();
         state.onHover && state.onHover(d.data);
-        
+
         state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
         state.tooltip.html(`<div class="tooltip-title">${
           state.tooltipTitle
@@ -248,7 +249,12 @@ export default Kapsule({
     // Entering + Updating
     const allSlices = slice.merge(newSlice);
 
-    allSlices.style('opacity', 1);
+    allSlices
+      .style('opacity', 1)
+      .attr('class', d => [
+        'slice',
+        ...(`${nodeClassNameOf(d.data) || ''}`.split(' ').map(str => str.trim()))
+      ].filter(s => s).join(' '));
 
     allSlices.select('path.main-arc').transition(transition)
       .attrTween('d', d => () => state.arc(d))
