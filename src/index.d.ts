@@ -38,6 +38,7 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   height(): number;
   height(height: number): ChainableInstance;
 
+  animationDuration(duration: number): ChainableInstance;
   data(): Node;
   data(rootNode: Node): ChainableInstance;
   children(): NodeAccessor<Node[]>;
