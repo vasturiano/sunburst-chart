@@ -51,7 +51,7 @@ export default Kapsule({
     },
     onClick: { triggerUpdate: false },
     onHover: { triggerUpdate: false },
-    animationDuration: { default: 750 }
+    transitionDuration: { triggerUpdate: false, default: 750 }
   },
 
   methods: {
@@ -170,7 +170,7 @@ export default Kapsule({
     const colorOf = accessorFn(state.color);
     const strokeColorOf = accessorFn(state.strokeColor);
     const nodeClassNameOf = accessorFn(state.nodeClassName);
-    const transition = d3Transition().duration(state.animationDuration);
+    const transition = d3Transition().duration(state.transitionDuration);
 
     const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
     const maxY = Math.min(1, focusD.y0 + levelYDelta * Math.min(

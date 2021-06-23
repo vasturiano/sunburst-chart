@@ -38,7 +38,6 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   height(): number;
   height(height: number): ChainableInstance;
 
-  animationDuration(duration: number): ChainableInstance;
   data(): Node;
   data(rootNode: Node): ChainableInstance;
   children(): NodeAccessor<Node[]>;
@@ -47,6 +46,7 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   label(textAccessor: NodeAccessor<string>): ChainableInstance;
   size(): NodeAccessor<string>;
   size(sizeAccessor: NodeAccessor<string>): ChainableInstance;
+  transitionDuration(duration: number): ChainableInstance;
   color(): NodeAccessor<string>;
   color(colorAccessor: NodeAccessor<string>): ChainableInstance;
   strokeColor(): NodeAccessor<string>;
