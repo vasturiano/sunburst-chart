@@ -46,7 +46,6 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   label(textAccessor: NodeAccessor<string>): ChainableInstance;
   size(): NodeAccessor<string>;
   size(sizeAccessor: NodeAccessor<string>): ChainableInstance;
-  transitionDuration(duration: number): ChainableInstance;
   color(): NodeAccessor<string>;
   color(colorAccessor: NodeAccessor<string>): ChainableInstance;
   strokeColor(): NodeAccessor<string>;
@@ -84,6 +83,9 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
 
   focusOnNode(): Node | null;
   focusOnNode(node: Node | null): ChainableInstance;
+
+  transitionDuration(): number;
+  transitionDuration(duration: number): ChainableInstance;
 }
 
 export type SunburstChartInstance = SunburstChartGenericInstance<SunburstChartInstance>;

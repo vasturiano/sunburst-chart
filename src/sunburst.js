@@ -51,7 +51,7 @@ export default Kapsule({
     },
     onClick: { triggerUpdate: false },
     onHover: { triggerUpdate: false },
-    transitionDuration: { triggerUpdate: false, default: 750 }
+    transitionDuration: { default: 750, triggerUpdate: false }
   },
 
   methods: {
