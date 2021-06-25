@@ -8,7 +8,6 @@ import { transition as d3Transition } from 'd3-transition';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
 
-const TRANSITION_DURATION = 750;
 const CHAR_PX_WIDTH = 7;
 const CHAR_PX_HEIGHT = 14;
 
@@ -51,7 +50,8 @@ export default Kapsule({
       }
     },
     onClick: { triggerUpdate: false },
-    onHover: { triggerUpdate: false }
+    onHover: { triggerUpdate: false },
+    transitionDuration: { default: 750, triggerUpdate: false }
   },
 
   methods: {
@@ -170,7 +170,7 @@ export default Kapsule({
     const colorOf = accessorFn(state.color);
     const strokeColorOf = accessorFn(state.strokeColor);
     const nodeClassNameOf = accessorFn(state.nodeClassName);
-    const transition = d3Transition().duration(TRANSITION_DURATION);
+    const transition = d3Transition().duration(state.transitionDuration);
 
     const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
     const maxY = Math.min(1, focusD.y0 + levelYDelta * Math.min(

@@ -83,6 +83,9 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
 
   focusOnNode(): Node | null;
   focusOnNode(node: Node | null): ChainableInstance;
+
+  transitionDuration(): number;
+  transitionDuration(duration: number): ChainableInstance;
 }
 
 export type SunburstChartInstance = SunburstChartGenericInstance<SunburstChartInstance>;
