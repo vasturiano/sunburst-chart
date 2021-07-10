@@ -1,4 +1,4 @@
-export interface ConfigOptions {}
+export interface ConfigOptions { }
 
 type Accessor<In, Out> = Out | string | ((obj: In) => Out);
 type NodeAccessor<T> = Accessor<Node, T>;
@@ -24,7 +24,7 @@ export interface DataNode {
   y1?: number;
 }
 
-type Orientation = 'angular'|'radial'|'auto';
+type Orientation = 'angular' | 'radial' | 'auto';
 
 type CompareFn<ItemType> = (a: ItemType, b: ItemType) => number;
 
@@ -65,7 +65,7 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   radiusScaleExponent(exponent: number): ChainableInstance;
 
   sort(): CompareFn<Node> | null;
-  sort(cmpFn: CompareFn<Node> | null);
+  sort(cmpFn: CompareFn<Node> | null): ChainableInstance;
 
   labelOrientation(): Orientation;
   labelOrientation(orientation: Orientation): ChainableInstance;
