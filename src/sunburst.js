@@ -270,10 +270,10 @@ export default Kapsule({
     }
 
     // Ensure propagation of data to labels children
-    allSlices.selectAll('text.angular-label').select('textPath.text-contour');
-    allSlices.selectAll('text.angular-label').select('textPath.text-stroke');
-    allSlices.selectAll('g.radial-label').select('text.text-contour');
-    allSlices.selectAll('g.radial-label').select('text.text-stroke');
+    allSlices.select('text.angular-label').select('textPath.text-contour');
+    allSlices.select('text.angular-label').select('textPath.text-stroke');
+    allSlices.select('g.radial-label').select('text.text-contour');
+    allSlices.select('g.radial-label').select('text.text-stroke');
 
     // Show/hide labels
     allSlices.select('.angular-label')
