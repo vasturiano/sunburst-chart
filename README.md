@@ -3,7 +3,7 @@ Sunburst Chart
 
 [![NPM package][npm-img]][npm-url]
 [![Build Size][build-size-img]][build-size-url]
-[![Dependencies][dependencies-img]][dependencies-url]
+[![NPM Downloads][npm-downloads-img]][npm-downloads-url]
 
 <p align="center">
      <a href="https://vasturiano.github.io/sunburst-chart/example/flare/"><img width="80%" src="https://vasturiano.github.io/sunburst-chart/example/flare/screenshot.png"></a>
@@ -22,23 +22,23 @@ See also the [Icicle](https://github.com/vasturiano/icicle-chart), [Circle Pack]
 
 ## Quick start
 
-```
+```js
 import Sunburst from 'sunburst-chart';
 ```
 or
-```
-Sunburst = require('sunburst-chart');
+```js
+const Sunburst = require('sunburst-chart');
 ```
 or even
-```
+```html
 <script src="//unpkg.com/sunburst-chart"></script>
 ```
 then
-```
+```js
 const myChart = Sunburst();
 myChart
-    .data(<myData>)
-    (<myDOMElement>);
+  .data(<myData>)
+  (<myDOMElement>);
 ```
 
 ## API reference
@@ -72,7 +72,7 @@ myChart
 
 ## Data syntax
 
-```
+```js
 {
   name: "root",
   children: [
@@ -101,9 +101,9 @@ myChart
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url) If this project has helped you and you'd like to contribute back, you can always [buy me a ☕](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url)!
 
-[npm-img]: https://img.shields.io/npm/v/sunburst-chart.svg
+[npm-img]: https://img.shields.io/npm/v/sunburst-chart
 [npm-url]: https://npmjs.org/package/sunburst-chart
-[build-size-img]: https://img.shields.io/bundlephobia/minzip/sunburst-chart.svg
+[build-size-img]: https://img.shields.io/bundlephobia/minzip/sunburst-chart
 [build-size-url]: https://bundlephobia.com/result?p=sunburst-chart
-[dependencies-img]: https://img.shields.io/david/vasturiano/sunburst-chart.svg
-[dependencies-url]: https://david-dm.org/vasturiano/sunburst-chart
+[npm-downloads-img]: https://img.shields.io/npm/dt/sunburst-chart
+[npm-downloads-url]: https://www.npmtrends.com/sunburst-chart
