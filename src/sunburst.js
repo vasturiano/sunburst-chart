@@ -121,7 +121,11 @@ export default Kapsule({
       state.tooltip
         .style('left', mousePos[0] + 'px')
         .style('top', mousePos[1] + 'px')
-        .style('transform', `translate(-${mousePos[0] / state.width * 100}%, 21px)`); // adjust horizontal position to not exceed canvas boundaries
+        // adjust horizontal position to not exceed canvas boundaries
+        .style('transform', `translate(-${mousePos[0] / state.width * 100}%, ${
+          // flip to above if near bottom
+          state.height - mousePos[1] < 100 ? 'calc(-100% - 6px)' : '21px'
+        })`);
     });
 
     // Reset focus by clicking on canvas
