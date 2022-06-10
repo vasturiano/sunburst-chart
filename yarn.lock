@@ -1506,9 +1506,9 @@ eventemitter3@^4.0.4:
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
 float-tooltip@1:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/float-tooltip/-/float-tooltip-1.0.0.tgz#d8773db6f6f1f51f56068f942d37d5ec9ffee885"
-  integrity sha512-55itrlw85iKjhqTU5602y4XC3RV2oD2vunAtlzPXX3kyLfkc0Pp2J4gbAkroIBBL7YGdt/p0Oyl4iMNRPY21pg==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/float-tooltip/-/float-tooltip-1.1.0.tgz#ea534b187b36c2cd41f00acb9868a68719061024"
+  integrity sha512-GpS/nlUGh0mm1VJt2ybjbHvc25stuc/+oL1y5R8iIEuOrnqNXt9xfUQ52ELTRlfg+c8RzX61Xw2McQfwWvMJBA==
   dependencies:
     d3-selection "2 - 3"
     kapsule "^1.13"
