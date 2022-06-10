@@ -1,4 +1,4 @@
-import { select as d3Select, pointer as d3Pointer } from 'd3-selection';
+import { select as d3Select } from 'd3-selection';
 import { scaleLinear, scalePow } from 'd3-scale';
 import { hierarchy as d3Hierarchy, partition as d3Partition } from 'd3-hierarchy';
 import { arc as d3Arc } from 'd3-shape';
@@ -7,6 +7,7 @@ import { interpolate as d3Interpolate } from 'd3-interpolate';
 import { transition as d3Transition } from 'd3-transition';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
+import Tooltip from 'float-tooltip';
 
 const CHAR_PX_WIDTH = 7;
 const CHAR_PX_HEIGHT = 14;
@@ -112,21 +113,7 @@ export default Kapsule({
     state.svg = el.append('svg');
     state.canvas = state.svg.append('g');
 
-    // tooltips
-    state.tooltip = el.append('div')
-      .attr('class', 'sunburst-tooltip');
-
-    el.on('mousemove', function(ev) {
-      const mousePos = d3Pointer(ev);
-      state.tooltip
-        .style('left', mousePos[0] + 'px')
-        .style('top', mousePos[1] + 'px')
-        // adjust horizontal position to not exceed canvas boundaries
-        .style('transform', `translate(-${mousePos[0] / state.width * 100}%, ${
-          // flip to above if near bottom
-          state.height - mousePos[1] < 100 ? 'calc(-100% - 6px)' : '21px'
-        })`);
-    });
+    state.tooltip = Tooltip()(el);
 
     // Reset focus by clicking on canvas
     state.svg
@@ -209,8 +196,7 @@ export default Kapsule({
         ev.stopPropagation();
         state.onHover && state.onHover(d.data);
 
-        state.tooltip.style('display', state.showTooltip(d.data, d) ? 'inline' : 'none');
-        state.tooltip.html(`<div class="tooltip-title">${
+        state.tooltip.content(!!state.showTooltip(d.data, d) && `<div class="tooltip-title">${
           state.tooltipTitle
             ? state.tooltipTitle(d.data, d)
             : getNodeStack(d)
@@ -219,7 +205,7 @@ export default Kapsule({
               .join(' &rarr; ')
         }</div>${state.tooltipContent(d.data, d)}`);
       })
-      .on('mouseout', () => { state.tooltip.style('display', 'none'); });
+      .on('mouseout', () => state.tooltip.content(false));
 
     newSlice.append('path')
       .attr('class', 'main-arc')
