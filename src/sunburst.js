@@ -148,8 +148,8 @@ export default Kapsule({
       .data(
         state.layoutData
           .filter(d => // Show only slices with a large enough angle and within the max levels
-            d.x1 >= focusD.x0
-            && d.x0 <= focusD.x1
+            d.x1 > focusD.x0
+            && d.x0 < focusD.x1
             && (d.x1-d.x0)/(focusD.x1-focusD.x0) > state.minSliceAngle/360
             && (!state.maxLevels || d.depth - (focusD.depth || (state.excludeRoot ? 1 : 0)) < state.maxLevels)
             && (d.y0 >=0 || focusD.parent) // hide negative layers on top level
@@ -181,7 +181,7 @@ export default Kapsule({
       });
 
     // Exiting
-    const oldSlice = slice.exit().transition(transition).style('opacity', 0).remove();
+    const oldSlice = slice.exit().transition(transition).remove();
     oldSlice.select('path.main-arc').attrTween('d', d => () => state.arc(d));
     oldSlice.select('path.hidden-arc').attrTween('d', d => () => middleArcLine(d));
 
