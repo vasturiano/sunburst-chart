@@ -3,11 +3,16 @@
   "version": "1.16.3",
   "description": "Sunburst interactive chart web component for visualizing hierarchical data",
   "license": "MIT",
+  "type": "module",
   "unpkg": "dist/sunburst-chart.min.js",
   "jsdelivr": "dist/sunburst-chart.min.js",
-  "main": "dist/sunburst-chart.common.js",
-  "module": "dist/sunburst-chart.module.js",
+  "main": "dist/sunburst-chart.mjs",
+  "module": "dist/sunburst-chart.mjs",
   "types": "dist/sunburst-chart.d.ts",
+  "exports": {
+    "umd": "./dist/sunburst-chart.min.js",
+    "default": "./dist/sunburst-chart.mjs"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vasturiano/sunburst-chart.git"
@@ -46,22 +51,23 @@
     "d3-shape": "1 - 3",
     "d3-transition": "2 - 3",
     "float-tooltip": "1",
-    "kapsule": "^1.13"
+    "kapsule": "^1.14"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.6",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-object-rest-spread": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-commonjs": "^22.0.1",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "postcss": "^8.4.14",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.76.0",
-    "rollup-plugin-dts": "^4.2.2",
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "postcss": "^8.4.21",
+    "rimraf": "^4.1.2",
+    "rollup": "^3.14.0",
+    "rollup-plugin-dts": "^5.1.1",
     "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.7.4"
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": ">=12"
   }
 }
