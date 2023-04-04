@@ -117,8 +117,8 @@ export default Kapsule({
 
     // Reset focus by clicking on canvas
     state.svg
-      .on('click', () => (state.onClick || this.focusOnNode)(null)) // By default reset zoom when clicking on canvas
-      .on('mouseover', () => state.onHover && state.onHover(null));
+      .on('click', (ev) => (state.onClick || this.focusOnNode)(null, ev)) // By default reset zoom when clicking on canvas
+      .on('mouseover', (ev) => state.onHover && state.onHover(null, ev));
 
   },
 
@@ -190,11 +190,11 @@ export default Kapsule({
       .style('opacity', 0)
       .on('click', (ev, d) => {
         ev.stopPropagation();
-        (state.onClick || this.focusOnNode)(d.data);
+        (state.onClick || this.focusOnNode)(d.data, ev);
       })
       .on('mouseover', (ev, d) => {
         ev.stopPropagation();
-        state.onHover && state.onHover(d.data);
+        state.onHover && state.onHover(d.data, ev);
 
         state.tooltip.content(!!state.showTooltip(d.data, d) && `<div class="tooltip-title">${
           state.tooltipTitle
