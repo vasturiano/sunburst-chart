@@ -117,8 +117,8 @@ export default Kapsule({
 
     // Reset focus by clicking on canvas
     state.svg
-      .on('click', (ev) => (state.onClick || this.focusOnNode)(null, ev)) // By default reset zoom when clicking on canvas
-      .on('mouseover', (ev) => state.onHover && state.onHover(null, ev));
+      .on('click', ev => (state.onClick || this.focusOnNode)(null, ev)) // By default reset zoom when clicking on canvas
+      .on('mouseover', ev => state.onHover && state.onHover(null, ev));
 
   },
 
