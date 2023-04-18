@@ -40,7 +40,7 @@ myChart
 ## API reference
 
 | Method | Description | Default |
-| --- | --- | --- |
+| --- | --- | :--: |
 | <b>data</b>([<i>object</i>]) | Getter/setter for chart data (see below for syntax details). | |
 | <b>width</b>([<i>number</i>]) | Getter/setter for the chart width in px. | *&lt;window width&gt;* |
 | <b>height</b>([<i>number</i>]) | Getter/setter for the chart height in px. | *&lt;window height&gt;* |
