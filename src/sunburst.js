@@ -32,6 +32,7 @@ export default Kapsule({
     centerRadius: { default: 0.1 },
     radiusScaleExponent: { default: 0.5 }, // radius decreases quadratically outwards to preserve area
     showLabels: { default: true },
+    handleNonFittingLabel: {},
     tooltipContent: { default: d => '', triggerUpdate: false },
     tooltipTitle: { default: null, triggerUpdate: false },
     showTooltip: { default: d => true, triggerUpdate: false},
@@ -265,28 +266,54 @@ export default Kapsule({
     allSlices.select('g.radial-label').select('text.text-contour');
     allSlices.select('g.radial-label').select('text.text-stroke');
 
+    // Label processing
+    const getLabelMeta = d => {
+      if (!state.showLabels) return { label: '', fits: false };
+
+      const isRadial = (state.labelOrientation === 'auto'
+        ? autoPickLabelOrientation(d)
+        : state.labelOrientation) !== 'angular';
+
+      let label = nameOf(d.data);
+      let fits = isRadial ? radialTextFits(d) : angularTextFits(d);
+
+      if (!fits && state.handleNonFittingLabel) {
+        const availableSpace = isRadial ? getAvailableLabelRadialSpace(d) : getAvailableLabelAngularSpace(d);
+        const newLabel = state.handleNonFittingLabel(label, availableSpace, d);
+        if (newLabel) {
+          label = newLabel;
+          fits = true;
+        }
+      }
+      return { isRadial, label, fits };
+    };
+    const labelMetaCache = new Map();
+
     // Show/hide labels
     allSlices.select('.angular-label')
       .transition(transition)
-        .styleTween('display', d => () => computeAngularLabels
-          && (state.labelOrientation === 'auto' ? autoPickLabelOrientation(d) === 'angular' : angularTextFits(d))
-          ? null : 'none'
-        );
+        .styleTween('display', d => () => {
+          labelMetaCache.set(d, getLabelMeta(d)); // cache label settings
+
+          const { isRadial, fits } = labelMetaCache.get(d);
+          return computeAngularLabels && !isRadial && fits ? null : 'none';
+        });
 
     allSlices.select('.radial-label')
       .transition(transition)
-        .styleTween('display', d => () => computeRadialLabels
-          && (state.labelOrientation === 'auto' ? autoPickLabelOrientation(d) === 'radial' : radialTextFits(d))
-          ? null : 'none'
-        );
+        .styleTween('display', d => () => {
+          const { isRadial, fits } = labelMetaCache.get(d);
+          return computeRadialLabels && isRadial && fits ? null : 'none';
+        });
 
     // Set labels
     computeAngularLabels && allSlices.selectAll('text.angular-label').selectAll('textPath')
-      .text(d => nameOf(d.data));
+      .transition(transition)
+        .textTween(d => () => labelMetaCache.get(d).label);
 
     computeRadialLabels && allSlices.selectAll('g.radial-label').selectAll('text')
-      .text(d => nameOf(d.data))
       .transition(transition)
+        .textTween(d => () => labelMetaCache.get(d).label)
         .attrTween('transform', d => () => radialTextTransform(d));
 
     //
@@ -320,19 +347,25 @@ export default Kapsule({
       return `translate(${x}, ${y}) rotate(${rot})`;
     }
 
-    function angularTextFits(d) {
+    function getAvailableLabelAngularSpace(d) {
       const deltaAngle = state.angleScale(d.x1) - state.angleScale(d.x0);
       const r = Math.max(0, (state.radiusScale(d.y0) + state.radiusScale(d.y1)) / 2);
-      const perimeter = r * deltaAngle;
-      return nameOf(d.data).toString().length * CHAR_PX_WIDTH < perimeter;
+      return r * deltaAngle;
+    }
+
+    function getAvailableLabelRadialSpace(d) {
+      return state.radiusScale(d.y1) - state.radiusScale(d.y0);
+    }
+
+    function angularTextFits(d) {
+      return nameOf(d.data).toString().length * CHAR_PX_WIDTH < getAvailableLabelAngularSpace(d);
     }
 
     function radialTextFits(d) {
       const availableHeight = state.radiusScale(d.y0) * (state.angleScale(d.x1) - state.angleScale(d.x0));
       if (availableHeight < CHAR_PX_HEIGHT) return false; // not enough angular space
 
-      const availableLength = state.radiusScale(d.y1) - state.radiusScale(d.y0);
-      return nameOf(d.data).toString().length * CHAR_PX_WIDTH < availableLength;
+      return nameOf(d.data).toString().length * CHAR_PX_WIDTH < getAvailableLabelRadialSpace(d);
     }
 
     function autoPickLabelOrientation(d) {
@@ -340,9 +373,23 @@ export default Kapsule({
       const angle = ((state.angleScale(d.x0) + state.angleScale(d.x1)) / 2)%Math.PI;
       const preferRadial = angle > Math.PI / 4 && angle < Math.PI * 3/4;
 
-      return preferRadial
+      let orientation = preferRadial
         ? (radialTextFits(d) ? 'radial' : angularTextFits(d) ? 'angular' : null)
-        : (angularTextFits(d) ? 'angular' : radialTextFits(d) ? 'radial' : null)
+        : (angularTextFits(d) ? 'angular' : radialTextFits(d) ? 'radial' : null);
+
+      if (!orientation) {
+        const availableArcWidth = state.radiusScale(d.y0) * (state.angleScale(d.x1) - state.angleScale(d.x0));
+        if (availableArcWidth < CHAR_PX_HEIGHT) {
+          // not enough space for radial text, choose angular
+          orientation = 'angular';
+        } else {
+          const angularSpace = getAvailableLabelAngularSpace(d);
+          const radialSpace = getAvailableLabelRadialSpace(d);
+          orientation = angularSpace < radialSpace ? 'radial' : 'angular';
+        }
+      }
+
+      return orientation;
     }
 
     function getNodeStack(d) {

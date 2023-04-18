@@ -30,6 +30,8 @@ type CompareFn<ItemType> = (a: ItemType, b: ItemType) => number;
 
 type TooltipFn = (node: Node, dataNode: DataNode) => string;
 
+type NonFittingLabelFn = (label: string, availablePx: number, node: DataNode) => string | null | undefined | false;
+
 export interface SunburstChartGenericInstance<ChainableInstance> {
   (element: HTMLElement): ChainableInstance;
 
@@ -67,10 +69,12 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   sort(): CompareFn<Node> | null;
   sort(cmpFn: CompareFn<Node> | null): ChainableInstance;
 
-  labelOrientation(): Orientation;
-  labelOrientation(orientation: Orientation): ChainableInstance;
   showLabels(): boolean;
   showLabels(show: boolean): ChainableInstance;
+  labelOrientation(): Orientation;
+  labelOrientation(orientation: Orientation): ChainableInstance;
+  handleNonFittingLabel(): NonFittingLabelFn | null;
+  handleNonFittingLabel(handleFn: NonFittingLabelFn | null): ChainableInstance;
   showTooltip(): (node: Node) => boolean;
   showTooltip(showTooltipFn: (node: Node) => boolean): ChainableInstance;
   tooltipTitle(): TooltipFn;

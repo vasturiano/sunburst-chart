@@ -1,0 +1,31 @@
+<head>
+  <script src="//unpkg.com/d3"></script>
+
+  <script src="//unpkg.com/sunburst-chart"></script>
+<!--  <script src="../../dist/sunburst-chart.js"></script>-->
+
+  <style>body { margin: 0 }</style>
+</head>
+<body>
+  <div id="chart"></div>
+
+  <script>
+    const color = d3.scaleOrdinal(d3.schemePaired);
+
+    fetch('flare.json').then(res => res.json()).then(data => {
+      Sunburst()
+        .data(data)
+        .label('name')
+        .size('size')
+        .color((d, parent) => color(parent ? parent.data.name : null))
+        .tooltipContent((d, node) => `Size: <i>${node.value}</i>`)
+        .handleNonFittingLabel((label, availablePx) => {
+          const numFitChars = Math.round(availablePx / 7); // ~7px per char
+          return numFitChars < 5
+            ? null
+            : `${label.slice(0, Math.round(numFitChars) - 3)}...`;
+        })
+        (document.getElementById('chart'));
+    });
+  </script>
+</body>
