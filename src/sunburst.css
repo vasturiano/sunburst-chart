@@ -3,8 +3,6 @@
 }
 
 .sunburst-viz text {
-  font-family: sans-serif;
-  font-size: 12px;
   dominant-baseline: middle;
   text-anchor: middle;
   pointer-events: none;
@@ -14,7 +12,6 @@
 .sunburst-viz .text-contour {
   fill: none;
   stroke: white;
-  stroke-width: 5;
   stroke-linejoin: 'round';
 }
 
