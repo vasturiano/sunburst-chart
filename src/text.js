@@ -26,8 +26,8 @@ const ellipsisText = (
   const getCharsWidth = numChars => measureTextWidth(text.slice(0, numChars), fontSize, measureCfg);
 
   let numChars = Math.ceil(text.length * (textSpace / fullTextWidth));
-  while (getCharsWidth(numChars) < textSpace) numChars++;
-  while (getCharsWidth(numChars) > textSpace) numChars--;
+  while (getCharsWidth(numChars) < textSpace && numChars < text.length) numChars++;
+  while (getCharsWidth(numChars) > textSpace && numChars > 0) numChars--;
 
   return numChars <= minRealChars ? '' : `${text.slice(0, numChars)}${elChar}`;
 };
