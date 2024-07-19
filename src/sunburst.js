@@ -53,6 +53,7 @@ export default Kapsule({
       }
     },
     onClick: { triggerUpdate: false },
+    onContextMenu: { triggerUpdate: false },
     onHover: { triggerUpdate: false },
     transitionDuration: { default: 750, triggerUpdate: false }
   },
@@ -91,7 +92,8 @@ export default Kapsule({
   },
 
   aliases: {
-    onNodeClick: 'onClick'
+    onNodeClick: 'onClick',
+    onNodeRightClick: 'onContextMenu'
   },
 
   init: function(domNode, state) {
@@ -122,6 +124,7 @@ export default Kapsule({
     // Reset focus by clicking on canvas
     state.svg
       .on('click', ev => (state.onClick || this.focusOnNode)(null, ev)) // By default reset zoom when clicking on canvas
+      .on('contextmenu', ev => (state.onContextMenu || (() => {}))(null, ev)) // By default reset zoom when clicking on canvas
       .on('mouseover', ev => state.onHover && state.onHover(null, ev));
 
   },
@@ -195,6 +198,10 @@ export default Kapsule({
       .on('click', (ev, d) => {
         ev.stopPropagation();
         (state.onClick || this.focusOnNode)(d.data, ev);
+      })
+      .on('contextmenu', (ev, d) => {
+        ev.stopPropagation();
+        (state.onContextMenu || (() => {}))(d.data, ev);
       })
       .on('mouseover', (ev, d) => {
         ev.stopPropagation();
