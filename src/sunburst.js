@@ -53,7 +53,7 @@ export default Kapsule({
       }
     },
     onClick: { triggerUpdate: false },
-    onContextMenu: { triggerUpdate: false },
+    onRightClick: { triggerUpdate: false },
     onHover: { triggerUpdate: false },
     transitionDuration: { default: 750, triggerUpdate: false }
   },
@@ -91,11 +91,6 @@ export default Kapsule({
     }
   },
 
-  aliases: {
-    onNodeClick: 'onClick',
-    onNodeRightClick: 'onContextMenu'
-  },
-
   init: function(domNode, state) {
     state.chartId = Math.round(Math.random() * 1e12); // Unique ID for DOM elems
 
@@ -124,7 +119,12 @@ export default Kapsule({
     // Reset focus by clicking on canvas
     state.svg
       .on('click', ev => (state.onClick || this.focusOnNode)(null, ev)) // By default reset zoom when clicking on canvas
-      .on('contextmenu', ev => (state.onContextMenu || (() => {}))(null, ev)) // By default do nothing when right-clicking on canvas
+      .on('contextmenu', ev => {
+        if (state.onRightClick) { // By default do nothing when right-clicking on canvas
+          state.onRightClick(null, ev);
+          ev.preventDefault();
+        }
+      })
       .on('mouseover', ev => state.onHover && state.onHover(null, ev));
 
   },
@@ -201,7 +201,10 @@ export default Kapsule({
       })
       .on('contextmenu', (ev, d) => {
         ev.stopPropagation();
-        (state.onContextMenu || (() => {}))(d.data, ev);
+        if (state.onRightClick) {
+          state.onRightClick(d.data, ev);
+          ev.preventDefault();
+        }
       })
       .on('mouseover', (ev, d) => {
         ev.stopPropagation();

@@ -83,6 +83,7 @@ export interface SunburstChartGenericInstance<ChainableInstance> {
   tooltipContent(fn: TooltipFn): ChainableInstance;
 
   onClick(cb: ((node: Node) => void) | null): ChainableInstance;
+  onRightClick(cb: ((node: Node) => void) | null): ChainableInstance;
   onHover(cb: ((node: Node | null) => void) | null): ChainableInstance;
 
   focusOnNode(): Node | null;
