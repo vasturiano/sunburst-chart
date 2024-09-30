@@ -65,7 +65,7 @@ myChart
 | <b>focusOnNode</b>([<i>object</i>]) | Getter/setter for the data node to focus the chart on. Use this method to retrieve the current node in focus, or to programmatically zoom the chart to a particular node. | |
 | <b>onHover</b>([<i>fn</i>]) | Callback function for mouse hover events. The data node object (or `null` if hovering on background) and the event object are included as arguments `onHover(node, event)`. | |
 | <b>onClick</b>([<i>fn</i>]) | Callback function for click events. The data node object (or `null` if clicking on background) and the event object are included as arguments `onClick(node, event)`. A falsy value (default) automatically focuses on clicked nodes, equivalent to `myChart.onClick(myChart.focusOnNode)`. | |
-| <b>onRightClick</b>([<i>fn</i>]) | Callback function for right click events. The data node object (or `null` if right-clicking on background) and the event object are included as arguments `onRightClick(node, event)`. A falsy value (default) will fallback to the default browser behaviour, which is to open the context menu. | |
+| <b>onRightClick</b>([<i>fn</i>]) | Callback function for right-click events. The data node object (or `null` if right-clicking on background) and the event object are included as arguments `onRightClick(node, event)`. A falsy value (default) will fallback to the default browser behaviour, which is to open the context menu. | |
 | <b>transitionDuration</b>([<i>number</i>]) | Getter/setter for the animation duration of transitions between states (opening, zoom in/out) in milliseconds. Enter `0` to disable animations. | `750` |
 
 ## Data syntax
