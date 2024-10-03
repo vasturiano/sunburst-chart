@@ -3,7 +3,14 @@ const measureTextWidth = (
   fontSize = 16,
   { strokeWidth = 1, fontFamily = 'sans-serif' } = {},
 ) => {
-  const ctx = new OffscreenCanvas(0, 0).getContext('2d');
+  let ctx;
+  if (typeof OffscreenCanvas !== 'undefined') {
+    ctx = new OffscreenCanvas(0, 0).getContext('2d');
+  } else {
+    const canvas = document.createElement('canvas');
+    ctx = canvas.getContext('2d');
+  }
+
   if (!ctx) return 0;
 
   ctx.font = `${fontSize}px ${fontFamily}`;
