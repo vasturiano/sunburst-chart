@@ -31,13 +31,12 @@
 
     const color = d3.scaleOrdinal(d3.schemePaired);
 
-    Sunburst()
+    new Sunburst(document.getElementById('chart'))
       .data(genNode())
       .sort((a, b) => b.value - a.value) // sort descending by size
       .color(d => color(d.name))
       .minSliceAngle(.4)
       .showLabels(false)
-      .tooltipContent((d, node) => `Size: <i>${node.value}</i>`)
-    (document.getElementById('chart'));
+      .tooltipContent((d, node) => `Size: <i>${node.value}</i>`);
   </script>
 </body>

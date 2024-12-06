@@ -13,7 +13,7 @@
     const color = d3.scaleOrdinal(d3.schemePaired);
 
     fetch('flare.json').then(res => res.json()).then(data => {
-      Sunburst()
+      new Sunburst(document.getElementById('chart'))
         .data(data)
         .label('name')
         .size('size')
@@ -24,8 +24,7 @@
           return numFitChars < 5
             ? null
             : `${label.slice(0, Math.round(numFitChars) - 3)}...`;
-        })
-        (document.getElementById('chart'));
+        });
     });
   </script>
 </body>

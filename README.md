@@ -31,10 +31,8 @@ or using a *script* tag
 ```
 then
 ```js
-const myChart = Sunburst();
-myChart
-  .data(<myData>)
-  (<myDOMElement>);
+const myChart = new Sunburst(<myDOMElement>);
+  .data(<myData>);
 ```
 
 ## API reference

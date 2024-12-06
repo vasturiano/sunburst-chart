@@ -38,11 +38,10 @@
       }]
     };
 
-    Sunburst()
+    new Sunburst(document.getElementById('chart'))
       .data(data)
       .size('size')
       .color('color')
-      .radiusScaleExponent(1)
-      (document.getElementById('chart'));
+      .radiusScaleExponent(1);
   </script>
 </body>
