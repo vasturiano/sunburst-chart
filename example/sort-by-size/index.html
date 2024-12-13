@@ -1,6 +1,4 @@
 <head>
-  <script src="//unpkg.com/d3"></script>
-
   <script src="//unpkg.com/sunburst-chart"></script>
   <!--<script src="../../dist/sunburst-chart.js"></script>-->
 
@@ -9,7 +7,10 @@
 <body>
   <div id="chart"></div>
 
-  <script>
+  <script type="module">
+    import { scaleOrdinal } from 'https://esm.sh/d3-scale';
+    import { schemePaired } from 'https://esm.sh/d3-scale-chromatic';
+
     const CHILDREN_PROB_DECAY = 0.5; // per level
     const MAX_CHILDREN = 40;
     const MAX_VALUE = 100;
@@ -29,7 +30,7 @@
       }
     }
 
-    const color = d3.scaleOrdinal(d3.schemePaired);
+    const color = scaleOrdinal(schemePaired);
 
     new Sunburst(document.getElementById('chart'))
       .data(genNode())
