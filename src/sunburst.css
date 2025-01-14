@@ -29,11 +29,6 @@
   fill: none;
 }
 
-.sunburst-viz .tooltip {
-  max-width: 320px;
-  white-space: nowrap;
-}
-
 .sunburst-viz .tooltip-title {
   font-weight: bold;
   text-align: center;

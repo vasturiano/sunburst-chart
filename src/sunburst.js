@@ -114,7 +114,7 @@ export default Kapsule({
       .style('font-family', 'sans-serif')
       .style('font-size', `${TEXT_FONTSIZE}px`);
 
-    state.tooltip = Tooltip()(el);
+    state.tooltip = new Tooltip(el);
 
     // Reset focus by clicking on canvas
     state.svg
