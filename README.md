@@ -20,6 +20,8 @@ For improved performance, arcs smaller than a given threshold (`minSliceAngle`) 
 
 See also the [Icicle](https://github.com/vasturiano/icicle-chart), [Circle Pack](https://github.com/vasturiano/circlepack-chart) and [Treemap](https://github.com/vasturiano/treemap-chart) charts.
 
+And check out the [React bindings](https://github.com/vasturiano/react-sunburst-chart).
+
 ## Quick start
 
 ```js
