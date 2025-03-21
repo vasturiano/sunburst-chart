@@ -29,7 +29,7 @@ import Sunburst from 'sunburst-chart';
 ```
 or using a *script* tag
 ```html
-<script src="//unpkg.com/sunburst-chart"></script>
+<script src="//cdn.jsdelivr.net/npm/sunburst-chart"></script>
 ```
 then
 ```js
