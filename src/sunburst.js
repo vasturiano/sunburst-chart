@@ -10,9 +10,6 @@ import accessorFn from 'accessor-fn';
 import Tooltip from 'float-tooltip';
 import  { measureTextWidth } from './text';
 
-const TEXT_FONTSIZE = 12;
-const TEXT_STROKE_WIDTH = 5;
-
 export default Kapsule({
 
   props: {
@@ -23,6 +20,8 @@ export default Kapsule({
     sort: { onChange(_, state) { state.needsReparse = true }},
     label: { default: d => d.name },
     labelOrientation: { default: 'auto' }, // angular, radial, auto
+    textSize: {default: 12},
+    textStrokeWidth: {default: 5},
     size: { default: 'value', onChange(_, state) { state.needsReparse = true }},
     color: { default: d => 'lightgrey' },
     strokeColor: { default: d => 'white' },
@@ -112,7 +111,7 @@ export default Kapsule({
     state.svg = el.append('svg');
     state.canvas = state.svg.append('g')
       .style('font-family', 'sans-serif')
-      .style('font-size', `${TEXT_FONTSIZE}px`);
+      .style('font-size', `${state.textSize}px`);
 
     state.tooltip = new Tooltip(el);
 
@@ -252,7 +251,7 @@ export default Kapsule({
 
     // white contour
     newSlice.selectAll('.text-contour')
-      .style('stroke-width', `${TEXT_STROKE_WIDTH}px`);
+      .style('stroke-width', `${state.textStrokeWidth}px`);
 
     // Entering + Updating
     const allSlices = slice.merge(newSlice);
@@ -375,14 +374,14 @@ export default Kapsule({
     }
 
     function angularTextFits(d) {
-      return measureTextWidth(nameOf(d.data).toString(), TEXT_FONTSIZE, { strokeWidth: TEXT_STROKE_WIDTH }) < getAvailableLabelAngularSpace(d);
+      return measureTextWidth(nameOf(d.data).toString(), state.textSize, { strokeWidth: state.textStrokeWidth }) < getAvailableLabelAngularSpace(d);
     }
 
     function radialTextFits(d) {
       const availableHeight = state.radiusScale(d.y0) * (state.angleScale(d.x1) - state.angleScale(d.x0));
-      if (availableHeight < TEXT_FONTSIZE + TEXT_STROKE_WIDTH) return false; // not enough angular space
+      if (availableHeight < state.textSize + state.textStrokeWidth) return false; // not enough angular space
 
-      return measureTextWidth(nameOf(d.data).toString(), TEXT_FONTSIZE, { strokeWidth: TEXT_STROKE_WIDTH }) < getAvailableLabelRadialSpace(d);
+      return measureTextWidth(nameOf(d.data).toString(), state.textSize, { strokeWidth: state.textStrokeWidth }) < getAvailableLabelRadialSpace(d);
     }
 
     function autoPickLabelOrientation(d) {
@@ -396,7 +395,7 @@ export default Kapsule({
 
       if (!orientation) {
         const availableArcWidth = state.radiusScale(d.y0) * (state.angleScale(d.x1) - state.angleScale(d.x0));
-        if (availableArcWidth < TEXT_FONTSIZE + TEXT_STROKE_WIDTH) {
+        if (availableArcWidth < state.textSize + state.textStrokeWidth) {
           // not enough space for radial text, choose angular
           orientation = 'angular';
         } else {
