@@ -191,6 +191,7 @@ export default Kapsule({
     const oldSlice = slice.exit().transition(transition).remove();
     oldSlice.select('path.main-arc').attrTween('d', d => () => state.arc(d));
     oldSlice.select('path.hidden-arc').attrTween('d', d => () => middleArcLine(d));
+    oldSlice.select('g.radial-label').selectAll('text').attrTween('transform', d => () => radialTextTransform(d));
 
     // Entering
     const newSlice = slice.enter().append('g')
